@@ -1,0 +1,13 @@
+# SQL Injection Detection Rules
+rules:
+  - id: sql-injection-1
+    description: Detects common SQL injection patterns
+    pattern: "' OR '1'='1' --"
+    severity: high
+
+  - id: sql-injection-2
+    description: Detects SQL injection attempts using UNION
+    pattern: "UNION SELECT"
+    severity: high
+
+# Additional rules can be added here

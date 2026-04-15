@@ -1,0 +1,13 @@
+# XSS Detection Rules
+rules:
+  - id: xss-1
+    description: Detects script tags in inputs
+    pattern: "<script>"
+    severity: high
+
+  - id: xss-2
+    description: Detects common XSS payloads
+    pattern: "javascript:" 
+    severity: high
+
+# Additional rules can be added here
