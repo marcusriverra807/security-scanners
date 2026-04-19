@@ -3,3 +3,35 @@
 
 # Updated XSS Detection Rules
 # Strengthen detection of XSS payloads and update filter rules
+xss_detection_rules:
+  - name: "Basic XSS Payloads"
+    patterns:
+      - "<script>alert('XSS')</script>"
+      - "<img src=x onerror=alert('XSS')>"
+      - "<svg><script>alert('XSS')</script></svg>"
+  
+  - name: "Attribute-Based XSS"
+    patterns:
+      - "<a href=javascript:alert('XSS')>Click me</a>"
+      - "<input onfocus=alert('XSS') autofocus>"
+  
+  - name: "Event Handler XSS"
+    patterns:
+      - "<body onload=alert('XSS')>"
+      - "<div onclick=alert('XSS')>Click here!</div>"
+  
+  - name: "URL-Based XSS"
+    patterns:
+      - "http://evil.com?param=<script>alert('XSS')</script>"
+      - "http://example.com/#<script>alert('XSS')</script>"
+  
+  - name: "HTML Injection"
+    patterns:
+      - "<!--<script>alert('XSS')</script>-->"
+
+# Ensure that the above patterns are applied across all request types
+apply_to:
+  - GET
+  - POST
+  - PUT
+  - DELETE
