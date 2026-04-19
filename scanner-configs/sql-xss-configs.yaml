@@ -1,0 +1,5 @@
+# Updated SQL Injection Detection Rules
+# Enhance existing detection rules to cover more cases
+
+# Updated XSS Detection Rules
+# Strengthen detection of XSS payloads and update filter rules
