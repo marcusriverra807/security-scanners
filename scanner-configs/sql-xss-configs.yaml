@@ -13,7 +13,7 @@ rules:
     severity: "high"
   - id: xss-003
     description: "Detect onerror handler injection"
-    pattern: "onerror=['\"]?[^'\"]*['\"]?|onclick=['\"]?[^'\"]*['\"]?|onload=['\"]?[^'\"]*['\"]?|onmouseover=['\"]?[^'\"]*['\"]?"
+    pattern: "(onerror|onclick|onload|onmouseover)=['\"]?[^'\"]*['\"]?"
     severity: "high"
   - id: xss-004
     description: "Detect SVG onload injection"
