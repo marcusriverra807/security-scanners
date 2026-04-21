@@ -37,7 +37,7 @@ rules:
     severity: "high"
   - id: new-xss-002
     description: "Detect DOM-based XSS"
-    pattern: "(document\.write|innerHTML|eval)\s*\("
+    pattern: "(document\.write|innerHTML|eval)\s*\(" 
     severity: "high"
   - id: new-xss-003
     description: "Detect usage of deprecated HTML attributes"
