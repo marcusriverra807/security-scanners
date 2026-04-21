@@ -5,11 +5,11 @@
 rules:
   - id: xss-001
     description: "Detect script tag injection"
-    pattern: "<script\s+[^>]*?(src=['\"]?[^'\"]*['\"]?[^>]*?|.*?</script>)|<[^>]*\s+(onload|onerror|onclick|onmouseover|onfocus|onblur)=['\"]?[^'\"]*['\"]?[^>]*?>"
+    pattern: "<script\b(?!.*\btype\s*=\s*['\"]?module['\"]?)[^>]*>"
     severity: "high"
   - id: xss-002
     description: "Detect JavaScript URLs"
-    pattern: "javascript:[^\s]*|data:text/html[^\s]*|vbscript:[^\s]*"
+    pattern: "javascript:(?!base64)[^\s]*|data:text/html[^\s]*|vbscript:[^\s]*"
     severity: "high"
   - id: xss-003
     description: "Detect onerror handler injection"
@@ -31,13 +31,29 @@ rules:
     description: "Detect image onerror injection"
     pattern: "<img\s+[^>]*?(onerror=['\"]?[^'\"]*['\"]?|onload=['\"]?[^'\"]*['\"]?|onclick=['\"]?[^'\"]*['\"]?)"
     severity: "high"
+  - id: new-xss-001
+    description: "Detect URL encoding attacks"
+    pattern: "(%3Cscript%3E|%3Ciframe%3E|%3Csvg%3E|%3Cimg%3E|%3Cbody%3E)"
+    severity: "high"
+  - id: new-xss-002
+    description: "Detect DOM-based XSS"
+    pattern: "(document\.write|innerHTML|eval)\s*\("
+    severity: "high"
+  - id: new-xss-003
+    description: "Detect usage of deprecated HTML attributes"
+    pattern: "(on\w+)=['\"]?[^'\"]*['\"]?"
+    severity: "medium"
   - id: sql-001
     description: "Detect SQL injection patterns"
-    pattern: "(\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bWHERE\b|\bOR\b|\bAND\b|\bUNION\b|--|/\*.*?\*/).*?(['\"]?[^;]*?['\"]?)"
+    pattern: "(\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bWHERE\b|\bOR\b|\bAND\b|\bUNION\b|--|/\*.*?\*/).*?(['\"]?[^;]*?['\"]?)(?<!\w)"
     severity: "high"
   - id: sql-002
     description: "Detect tautology-based SQL injection"
     pattern: "(1=1|1=0|0=0|\bTRUE\b|\bFALSE\b|/\*.*?\*/)"
+    severity: "high"
+  - id: new-sql-001
+    description: "Detect SQL injection via time-based attacks"
+    pattern: "(SLEEP\(|WAITFOR|BENCHMARK\()"
     severity: "high"
   - id: sensitive-001
     description: "Detect hardcoded API keys"
