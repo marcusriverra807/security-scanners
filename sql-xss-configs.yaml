@@ -1,2 +1,4 @@
-- CVE-2023-XXXX: Description of the vulnerability and mitigation
-- CVE-2023-YYYY: Description of the vulnerability and mitigation
+- CVE-2023-38146: Focuses on XSS vulnerabilities and mitigation strategies related to this CVE.
+- CVE-2023-2437: Relevant to XSS vulnerabilities, providing specific detection techniques.
+- CVE-2022-21882: A Windows elevation vulnerability that may intersect with XSS, includes mitigation strategies.
+- CVE-2022-44215: Additional CVE that addresses vulnerabilities that the current rules should cover, with guidelines for detection.
