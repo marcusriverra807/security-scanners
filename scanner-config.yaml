@@ -1,0 +1,5 @@
+# Updated Scanner Configuration
+
+- New settings for CVE scanning.
+- Enhanced detection rules for vulnerabilities.
+- Updated thresholds for alerts based on recent CVEs.
