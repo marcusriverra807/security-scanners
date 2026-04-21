@@ -1,0 +1,33 @@
+# SQL XSS Detection Configuration
+
+# Enhanced detection rules for Cross-Site Scripting (XSS)
+
+rules:
+  - id: xss-001
+    description: "Detect script tag injection"
+    pattern: "<script.*?>.*?</script>"
+    severity: "high"
+  - id: xss-002
+    description: "Detect JavaScript URLs"
+    pattern: "javascript:.*?"
+    severity: "high"
+  - id: xss-003
+    description: "Detect onerror handler injection"
+    pattern: "onerror=\".*?\""
+    severity: "high"
+  - id: xss-004
+    description: "Detect SVG onload injection"
+    pattern: "<svg.*?onload=.*?"
+    severity: "high"
+  - id: xss-005
+    description: "Detect iframe with JavaScript injection"
+    pattern: "<iframe.*?src=\"javascript:.*?\".*?>"
+    severity: "high"
+  - id: xss-006
+    description: "Detect body onload injection"
+    pattern: "<body.*?onload=.*?"
+    severity: "high"
+  - id: xss-007
+    description: "Detect image onerror injection"
+    pattern: "<img.*?onerror=.*?"
+    severity: "high"
