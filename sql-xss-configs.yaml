@@ -5,58 +5,58 @@
 rules:
   - id: xss-001
     description: "Detect script tag injection"
-    pattern: "<script\b[^>]*?src=["'][^"']*["']?[^>]*?>"
+    pattern: "<script\b[^>]*?src=["'][^"']*["']?[^>]*?>|<script>.*?</script>"
     severity: "high"
-    context: "Check for script tags without valid sources"
+    context: "Check for script tags without valid sources and inline scripts"
   - id: xss-002
     description: "Detect JavaScript URLs"
-    pattern: "javascript:[^'\s]*|data:text/html[^'\s]*"
+    pattern: "javascript:[^'\s]*|data:text/html[^'\s]*|onerror\s*=\s*['"]javascript:[^'"]*['"]"
     severity: "high"
-    context: "Avoid untrusted JavaScript URLs"
+    context: "Avoid untrusted JavaScript URLs and inline event handlers that execute JavaScript"
   - id: xss-003
     description: "Detect onerror handler injection"
-    pattern: "(onerror|onclick|onload)\s*=\s*['"]([^'\"]*?)['"]"
+    pattern: "(onerror|onclick|onload|onbeforeunload)\s*=\s*['"]([^'"]*?)['"]"
     severity: "medium"
-    context: "Handle event attributes cautiously"
+    context: "Handle event attributes cautiously, and validate event handlers"
   - id: xss-004
     description: "Detect SVG onload injection"
-    pattern: "<svg\b[^>]*?(onload|onerror)\s*=\s*['"]([^'\"]*?)['"]"
+    pattern: "<svg\b[^>]*?(onload|onerror|onclick)\s*=\s*['"]([^'"]*?)['"]"
     severity: "high"
-    context: "Ensure SVG elements do not execute scripts"
+    context: "Ensure SVG elements do not execute scripts, and validate all SVG attributes"
   - id: xss-005
     description: "Detect iframe with JavaScript injection"
     pattern: "<iframe\b[^>]*?(src=["']javascript:[^"']*["']|srcdoc=["'][^"']*["'])"
     severity: "high"
-    context: "Review iframe sources for security"
+    context: "Review iframe sources for security, ensuring they are from trusted domains"
   - id: xss-006
     description: "Detect body onload injection"
-    pattern: "<body\b[^>]*?(onload|onbeforeunload)\s*=\s*['"]([^'\"]*?)['"]"
+    pattern: "<body\b[^>]*?(onload|onbeforeunload)\s*=\s*['"]([^'"]*?)['"]"
     severity: "medium"
-    context: "Validate body event handlers"
+    context: "Validate body event handlers and ensure they do not execute untrusted scripts"
   - id: xss-007
     description: "Detect image onerror injection"
-    pattern: "<img\b[^>]*?(onerror|onload)\s*=\s*['"]([^'\"]*?)['"]"
+    pattern: "<img\b[^>]*?(onerror|onload)\s*=\s*['"]([^'"]*?)['"]"
     severity: "medium"
-    context: "Ensure images do not execute scripts"
+    context: "Ensure images do not execute scripts, and validate all image attributes"
   - id: sql-001
     description: "Detect SQL injection patterns"
-    pattern: "(?i)\b(SELECT|INSERT|UPDATE|DELETE|WHERE|OR|AND|UNION)\b[^;]*?('|")?[^;]*?('|")?$"
+    pattern: "(?i)\b(SELECT|INSERT|UPDATE|DELETE|WHERE|OR|AND|UNION|DROP|EXEC)\b[^;]*?('|\")?[^;]*?('|\")?$"
     severity: "high"
-    context: "Look for common SQL keywords"
+    context: "Look for common SQL keywords and patterns indicative of SQL injection"
   - id: sql-002
     description: "Detect tautology-based SQL injection"
-    pattern: "(1=1|1=0|0=0)"
+    pattern: "(1=1|1=0|0=0|true|false|OR\s+1=1)"
     severity: "high"
-    context: "Identify tautological conditions"
+    context: "Identify tautological conditions that may indicate SQL injection"
   - id: sensitive-001
     description: "Detect hardcoded API keys"
     pattern: "(?<![A-Za-z0-9])[A-Za-z0-9]{32,}(?![A-Za-z0-9])"
     severity: "medium"
-    context: "Check for long alphanumeric strings"
+    context: "Check for long alphanumeric strings that may represent API keys"
   - id: sensitive-002
     description: "Detect hardcoded secrets"
-    pattern: "(?i)\b(password|secret|token|api_key)\s*=\s*['"]([^'";]*)['"]"
+    pattern: "(?i)\b(password|secret|token|api_key|authorization)\s*=\s*['"]([^'";]*)['"]"
     severity: "high"
-    context: "Identify common secret patterns"
+    context: "Identify common secret patterns and ensure sensitive data is not hardcoded"
 
 # Regular review schedule: Every 3 months to ensure detection rules are up-to-date
