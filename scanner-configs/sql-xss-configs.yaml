@@ -9,22 +9,25 @@ xss_detection_rules:
       - "<script>alert('XSS')</script>"
       - "<img src=x onerror=alert('XSS')>"
       - "<svg><script>alert('XSS')</script></svg>"
-  
+      - "<script>document.write('<img src=x onerror=alert(1)>')</script>"
+      - "<svg/onload=alert('XSS')>"
+
   - name: "Attribute-Based XSS"
     patterns:
       - "<a href=javascript:alert('XSS')>Click me</a>"
       - "<input onfocus=alert('XSS') autofocus>"
-  
+
   - name: "Event Handler XSS"
     patterns:
       - "<body onload=alert('XSS')>"
       - "<div onclick=alert('XSS')>Click here!</div>"
-  
+      - "contextual patterns to check for event handlers in various HTML tags"
+
   - name: "URL-Based XSS"
     patterns:
       - "http://evil.com?param=<script>alert('XSS')</script>"
       - "http://example.com/#<script>alert('XSS')</script>"
-  
+
   - name: "HTML Injection"
     patterns:
       - "<!--<script>alert('XSS')</script>-->"
