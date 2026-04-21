@@ -1,42 +1,49 @@
-# Updated SQL Injection Detection Rules
-# Enhance existing detection rules to cover more cases
+# SQL XSS Detection Configuration
 
-# Updated XSS Detection Rules
-# Strengthen detection of XSS payloads and update filter rules
-xss_detection_rules:
-  - name: "Basic XSS Payloads"
-    patterns:
-      - "<script>alert('XSS')</script>"
-      - "<img src=x onerror=alert('XSS')>"
-      - "<svg><script>alert('XSS')</script></svg>"
-      - "<script>document.write('<img src=x onerror=alert(1)>')</script>"
-      - "<svg/onload=alert('XSS')>"
-      - "<script src='http://malicious.com/xss.js'></script>"
-      - "<iframe src='javascript:alert(1)'></iframe>"
+# Enhanced detection rules for Cross-Site Scripting (XSS)
 
-  - name: "Attribute-Based XSS"
-    patterns:
-      - "<a href=javascript:alert('XSS')>Click me</a>"
-      - "<input onfocus=alert('XSS') autofocus>"
-
-  - name: "Event Handler XSS"
-    patterns:
-      - "<body onload=alert('XSS')>"
-      - "<div onclick=alert('XSS')>Click here!</div>"
-      - "contextual patterns to check for event handlers in various HTML tags"
-
-  - name: "URL-Based XSS"
-    patterns:
-      - "http://evil.com?param=<script>alert('XSS')</script>"
-      - "http://example.com/#<script>alert('XSS')</script>"
-
-  - name: "HTML Injection"
-    patterns:
-      - "<!--<script>alert('XSS')</script>-->"
-
-# Ensure that the above patterns are applied across all request types
-apply_to:
-  - GET
-  - POST
-  - PUT
-  - DELETE
+rules:
+  - id: xss-001
+    description: "Detect script tag injection"
+    pattern: "<script\s+[^>]*?(src=['\"]?[^'\"]*['\"]?[^>]*?|.*?</script>)"
+    severity: "high"
+  - id: xss-002
+    description: "Detect JavaScript URLs"
+    pattern: "javascript:[^\s]*|data:text/html[^\s]*"
+    severity: "high"
+  - id: xss-003
+    description: "Detect onerror handler injection"
+    pattern: "onerror=['\"]?[^'\"]*['\"]?|onclick=['\"]?[^'\"]*['\"]?|onload=['\"]?[^'\"]*['\"]?"
+    severity: "high"
+  - id: xss-004
+    description: "Detect SVG onload injection"
+    pattern: "<svg\s+[^>]*?(onload=['\"]?[^'\"]*['\"]?|onerror=['\"]?[^'\"]*['\"]?)"
+    severity: "high"
+  - id: xss-005
+    description: "Detect iframe with JavaScript injection"
+    pattern: "<iframe\s+[^>]*?(src=['\"]?javascript:[^'\"]*['\"]?|srcdoc=['\"]?[^'\"]*['\"]?)"
+    severity: "high"
+  - id: xss-006
+    description: "Detect body onload injection"
+    pattern: "<body\s+[^>]*?(onload=['\"]?[^'\"]*['\"]?|onbeforeunload=['\"]?[^'\"]*['\"]?)"
+    severity: "high"
+  - id: xss-007
+    description: "Detect image onerror injection"
+    pattern: "<img\s+[^>]*?(onerror=['\"]?[^'\"]*['\"]?|onload=['\"]?[^'\"]*['\"]?)"
+    severity: "high"
+  - id: sql-001
+    description: "Detect SQL injection patterns"
+    pattern: "(\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bWHERE\b|\bOR\b|\bAND\b|\bUNION\b).*?(['\"]?[^;]*?['\"]?)"
+    severity: "high"
+  - id: sql-002
+    description: "Detect tautology-based SQL injection"
+    pattern: "(1=1|1=0|0=0|\bTRUE\b|\bFALSE\b)"
+    severity: "high"
+  - id: sensitive-001
+    description: "Detect hardcoded API keys"
+    pattern: "(?:API_KEY|SECRET|TOKEN|PASSWORD|KEY)=['\"]?([A-Za-z0-9]{32,})['\"]?"
+    severity: "high"
+  - id: sensitive-002
+    description: "Detect hardcoded secrets"
+    pattern: "(?:password|secret|token|api_key)\s*=\s*['\"]?([^'\"]*?)['\"]?"
+    severity: "high"
