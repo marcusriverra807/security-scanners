@@ -5,7 +5,7 @@
 rules:
   - id: xss-001
     description: "Detect script tag injection"
-    pattern: "<script\b[^>]*?src=['\"[^\'"]*['"]?[^>]*?>|<script>.*?</script>"
+    pattern: "<script\b[^>]*?src=['\"[^'\"]*['\"]?[^>]*?>|<script>.*?</script>"
     severity: "high"
     context: "Check for script tags without valid sources and inline scripts"
   - id: xss-002
@@ -40,12 +40,12 @@ rules:
     context: "Ensure images do not execute scripts, and validate all image attributes"
   - id: sql-001
     description: "Detect SQL injection patterns"
-    pattern: "(?i)\b(SELECT|INSERT|UPDATE|DELETE|WHERE|OR|AND|UNION|DROP|EXEC)\b[^;]*?('|")?[^;]*?('|")?$"
+    pattern: "(?i)\b(SELECT|INSERT|UPDATE|DELETE|WHERE|OR|AND|UNION|DROP|EXEC|ALTER|CREATE|MERGE)\b[^;]*?('|\")?[^;]*?('|\")?$"
     severity: "high"
     context: "Look for common SQL keywords and patterns indicative of SQL injection"
   - id: sql-002
     description: "Detect tautology-based SQL injection"
-    pattern: "(1=1|1=0|0=0|true|false|OR\s+1=1)"
+    pattern: "(1=1|1=0|0=0|true|false|OR\s+1=1|AND\s+1=1)"
     severity: "high"
     context: "Identify tautological conditions that may indicate SQL injection"
   - id: sensitive-001
