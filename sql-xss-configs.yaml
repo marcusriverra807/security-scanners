@@ -21,7 +21,7 @@ rules:
     severity: "high"
   - id: xss-005
     description: "Detect iframe with JavaScript injection"
-    pattern: "<iframe.*?(src="javascript:.*?"|srcdoc=.*?)"
+    pattern: "<iframe.*?(src=\"javascript:.*?\"|srcdoc=.*?)"
     severity: "high"
   - id: xss-006
     description: "Detect body onload injection"
@@ -30,4 +30,20 @@ rules:
   - id: xss-007
     description: "Detect image onerror injection"
     pattern: "<img.*?(onerror=.*?|onload=.*?)"
+    severity: "high"
+  - id: sql-001
+    description: "Detect SQL injection patterns"
+    pattern: "(\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bWHERE\b|\bOR\b|\bAND\b|\bUNION\b).*?('|")?[^;]*?('|")?"
+    severity: "high"
+  - id: sql-002
+    description: "Detect tautology-based SQL injection"
+    pattern: "(1=1|1=0|0=0)"
+    severity: "high"
+  - id: sensitive-001
+    description: "Detect hardcoded API keys"
+    pattern: "[A-Za-z0-9]{32,}"
+    severity: "high"
+  - id: sensitive-002
+    description: "Detect hardcoded secrets"
+    pattern: "(password|secret|token|api_key)\s*=\s*('|")[^'";]*('|")"
     severity: "high"
