@@ -1,0 +1,10 @@
+# SQL Injection Detection Rules
+
+- rule_id: sql_injection_rule_1
+  description: Detects common SQL injection patterns
+  regex: '(SELECT|INSERT|UPDATE|DELETE|DROP|;|--|\')'\n  action: alert
+
+- rule_id: sql_injection_rule_2
+  description: Detects SQL injection through input fields
+  regex: '.*(\')|(%27)|(%22).*'
+  action: alert
