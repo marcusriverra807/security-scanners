@@ -5,7 +5,7 @@
 rules:
   - id: xss-001
     description: "Detect script tag injection"
-    pattern: "<script\b(?!.*\btype\s*=\s*['\"]?module['\"]?)[^>]*>"
+    pattern: "<script\b(?!.*\btype\s*=\s*[\'\"]?module[\'\"]?)[^>]*>"
     severity: "high"
   - id: xss-002
     description: "Detect JavaScript URLs"
@@ -13,23 +13,23 @@ rules:
     severity: "high"
   - id: xss-003
     description: "Detect onerror handler injection"
-    pattern: "(onerror|onclick|onload|onmouseover)=['\"]?[^'\"]*['\"]?"
+    pattern: "(onerror|onclick|onload|onmouseover)=[\'\"]?[^\'\"]*[\'\"]?"
     severity: "high"
   - id: xss-004
     description: "Detect SVG onload injection"
-    pattern: "<svg\s+[^>]*?(onload=['\"]?[^'\"]*['\"]?|onerror=['\"]?[^'\"]*['\"]?|onclick=['\"]?[^'\"]*['\"]?)"
+    pattern: "<svg\s+[^>]*?(onload=[\'\"]?[^\'\"]*[\'\"]?|onerror=[\'\"]?[^\'\"]*[\'\"]?|onclick=[\'\"]?[^\'\"]*[\'\"]?)"
     severity: "high"
   - id: xss-005
     description: "Detect iframe with JavaScript injection"
-    pattern: "<iframe\s+[^>]*?(src=['\"]?javascript:[^'\"]*['\"]?|srcdoc=['\"]?[^'\"]*['\"]?|onload=['\"]?[^'\"]*['\"]?)"
+    pattern: "<iframe\s+[^>]*?(src=[\'\"]?javascript:[^\'\"]*[\'\"]?|srcdoc=[\'\"]?[^\'\"]*[\'\"]?|onload=[\'\"]?[^\'\"]*[\'\"]?)"
     severity: "high"
   - id: xss-006
     description: "Detect body onload injection"
-    pattern: "<body\s+[^>]*?(onload=['\"]?[^'\"]*['\"]?|onbeforeunload=['\"]?[^'\"]*['\"]?|onclick=['\"]?[^'\"]*['\"]?)"
+    pattern: "<body\s+[^>]*?(onload=[\'\"]?[^\'\"]*[\'\"]?|onbeforeunload=[\'\"]?[^\'\"]*[\'\"]?|onclick=[\'\"]?[^\'\"]*[\'\"]?)"
     severity: "high"
   - id: xss-007
     description: "Detect image onerror injection"
-    pattern: "<img\s+[^>]*?(onerror=['\"]?[^'\"]*['\"]?|onload=['\"]?[^'\"]*['\"]?|onclick=['\"]?[^'\"]*['\"]?)"
+    pattern: "<img\s+[^>]*?(onerror=[\'\"]?[^\'\"]*[\'\"]?|onload=[\'\"]?[^\'\"]*[\'\"]?|onclick=[\'\"]?[^\'\"]*[\'\"]?)"
     severity: "high"
   - id: new-xss-001
     description: "Detect URL encoding attacks"
@@ -37,7 +37,7 @@ rules:
     severity: "high"
   - id: new-xss-002
     description: "Detect DOM-based XSS"
-    pattern: "(document\.write|innerHTML|eval)\s*\(" 
+    pattern: "(document\.write|innerHTML|eval)\s*\("
     severity: "high"
   - id: new-xss-003
     description: "Detect usage of deprecated HTML attributes"
@@ -57,9 +57,9 @@ rules:
     severity: "high"
   - id: sensitive-001
     description: "Detect hardcoded API keys"
-    pattern: "(?:API_KEY|SECRET|TOKEN|PASSWORD|KEY)=['\"]?([A-Za-z0-9]{32,})['\"]?|[A-Za-z0-9]{40}|\b[A-Za-z0-9]{24}\b"
+    pattern: "(?:API_KEY|SECRET|TOKEN|PASSWORD|KEY)=[\'\"]?([A-Za-z0-9]{32,})[\'\"]?|[A-Za-z0-9]{40}|\b[A-Za-z0-9]{24}\b"
     severity: "high"
   - id: sensitive-002
     description: "Detect hardcoded secrets"
-    pattern: "(?:password|secret|token|api_key)\s*=\s*['\"]?([^'\"]*?)['\"]?|['\"]?([A-Za-z0-9]{40})['\"]?"
+    pattern: "(?:password|secret|token|api_key)\s*=\s*[\'\"]?([^\'\"]*?)\[\'\"]?|[\'\"]?([A-Za-z0-9]{40})[\'\"]?"
     severity: "high"
