@@ -1,0 +1,6 @@
+# Enhanced SQL Injection Detection Rules
+
+- rule_id: enhanced_sql_injection_rule
+  description: Detects SQL injection attempts using advanced techniques
+  regex: '.*(\bUNION\b|\bSELECT\b).*'
+  action: alert
