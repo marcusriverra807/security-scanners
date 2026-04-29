@@ -126,4 +126,11 @@ rules:
     estimated_fp_rate: "4%"
     runbook_link: "https://example.com/runbook/event-handler-injection"
 
+# Potential Areas for Further Improvement:
+# - Establish a continuous monitoring routine for rule effectiveness and updates.
+# - Incorporate feedback loops to adjust rules based on real-world detection performance.
+# - Expand test cases to cover edge scenarios and improve detection accuracy.
+# - Integrate with threat intelligence feeds to dynamically update detection patterns.
+# - Track performance metrics (detection rates, false positives) for ongoing optimization.
+
 # Regular review schedule: Every 3 months to ensure detection rules are up-to-date
