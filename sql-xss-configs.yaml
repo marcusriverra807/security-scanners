@@ -55,7 +55,7 @@ rules:
     runbook_link: "https://example.com/runbook/svg-onload"
   - id: xss-005
     description: "Detect iframe with JavaScript injection"
-    pattern: "<iframe\b[^>]*?(src=['\"]javascript:[^'\"]*['\"]|srcdoc=['\'][^'\"]*['\"])"
+    pattern: "<iframe\b[^>]*?(src=['\"]javascript:[^'\"]*['\"]|srcdoc=[''][^'\"]*[''])"
     severity: "high"
     context: "Review iframe sources for security, ensuring they are from trusted domains."
     test_cases:
@@ -91,7 +91,7 @@ rules:
     runbook_link: "https://example.com/runbook/image-onerror"
   - id: sql-001
     description: "Detect SQL injection patterns"
-    pattern: "(?i)\b(SELECT|INSERT|UPDATE|DELETE|WHERE|OR|AND|UNION|DROP|EXEC|ALTER|CREATE|MERGE)\b[^;]*?('|\")?[^;]*?('|\")?$"
+    pattern: "(?i)(?<!\w)\b(SELECT|INSERT|UPDATE|DELETE|WHERE|OR|AND|UNION|DROP|EXEC|ALTER|CREATE|MERGE)\b[^;]*?('|")?[^;]*?('|")?(?!\s*--|\s*/\*)"
     severity: "high"
     context: "Look for common SQL keywords and patterns indicative of SQL injection, not preceded or followed by comments or documentation."
     test_cases:
@@ -129,7 +129,7 @@ rules:
     runbook_link: "https://example.com/runbook/hardcoded-api-keys"
   - id: sensitive-002
     description: "Detect hardcoded secrets"
-    pattern: "(?i)\b(password|secret|token|api_key|authorization)\s*=\s*['\"]([^'\";]*)['\"]"
+    pattern: "(?i)\b(password|secret|token|api_key|authorization)\s*=\s*['\"]([^'";]*)['\"]"
     severity: "high"
     context: "Identify common secret patterns and ensure sensitive data is not hardcoded, excluding safe configuration patterns."
     test_cases:
@@ -179,7 +179,7 @@ rules:
     runbook_link: "https://example.com/runbook/inline-event-handlers"
   - id: xss-010
     description: "Detect DOM-based XSS patterns"
-    pattern: "(document\.write|innerHTML|outerHTML|eval)\s*\("
+    pattern: "(document\.write|innerHTML|outerHTML|eval)\s*\(""
     severity: "high"
     context: "Check for unsafe DOM manipulations that may introduce XSS vulnerabilities."
     test_cases:
@@ -191,7 +191,7 @@ rules:
     runbook_link: "https://example.com/runbook/dom-xss"
   - id: sql-003
     description: "Detect SQL injection comment patterns"
-    pattern: "(?i)\b(SELECT|INSERT|UPDATE|DELETE|WHERE|OR|AND|UNION|DROP|EXEC|ALTER|CREATE|MERGE)\b[^;]*?('|\")?[^;]*?('|\")?(\s*--.*|\s*/\*.*\*/)?$"
+    pattern: "(?i)\b(SELECT|INSERT|UPDATE|DELETE|WHERE|OR|AND|UNION|DROP|EXEC|ALTER|CREATE|MERGE)\b[^;]*?('|")?[^;]*?('|")?(\s*--.*|\s*/\*.*\*/)?$"
     severity: "high"
     context: "Identify SQL statements that include comments to bypass detection mechanisms."
     test_cases:
