@@ -53,8 +53,12 @@ rules:
     severity: "high"
   - id: new-xss-006
     description: "Detect inline event handlers"
-    pattern: "(?<!<a\s+[^>]*?href=)(?<!<button\s+)[^<]*(on\w+=['\"]?[^'\"]*['\"]?)"
+    pattern: "(?<!<a\s+[^>]*?href=)(?<!<button\s+)[^<]*(on\w+=['\"?[^'\"]*['\"?])"
     severity: "medium"
+  - id: xss-reflected-001
+    description: "Detect reflected XSS"
+    pattern: "(?<=>)(.*?)(<script.*?>|javascript:|on\w+=|data:text/html|eval\\()"
+    severity: "high"
   - id: sql-001
     description: "Detect SQL injection patterns"
     pattern: "(?<!\w)(\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bWHERE\b|\bOR\b|\bAND\b|\bUNION\b|--|/\*.*?\*/)(?!.*\bFROM\b).*?(['\"]?[^;]*?['\"]?)(?<!\w)"
