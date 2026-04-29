@@ -41,7 +41,7 @@ rules:
     severity: "high"
   - id: new-xss-003
     description: "Detect usage of deprecated HTML attributes"
-    pattern: "<(script|iframe|svg)[^>]*?(on\w+=['\"]?[^'\"]*['\"]?)"
+    pattern: "<(script|iframe|svg)[^>]*?(on\w+=['\"?[^'\"]*['\"?])"
     severity: "medium"
   - id: new-xss-004
     description: "Detect script tag with attributes"
