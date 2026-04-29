@@ -1,0 +1,11 @@
+# XSS Detection Rules
+
+- rule_id: xss_rule_1
+  description: Detects basic reflected XSS
+  regex: '<script.*?>.*?</script>'
+  action: alert
+
+- rule_id: xss_rule_2
+  description: Detects XSS through event handlers
+  regex: '(onerror|onclick|onload|onmouseover)=".*"'
+  action: alert
