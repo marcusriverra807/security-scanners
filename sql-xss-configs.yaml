@@ -55,7 +55,7 @@ rules:
     runbook_link: "https://example.com/runbook/svg-onload"
   - id: xss-005
     description: "Detect iframe with JavaScript injection"
-    pattern: "<iframe\b[^>]*?(src=['\"]javascript:[^'\"]*['\"]|srcdoc=['\"][^'\"]*['\"])"
+    pattern: "<iframe\b[^>]*?(src=['\"]javascript:[^'\"]*['\"]|srcdoc=['\'][^'\"]*['\"])"
     severity: "high"
     context: "Review iframe sources for security, ensuring they are from trusted domains."
     test_cases:
@@ -91,7 +91,7 @@ rules:
     runbook_link: "https://example.com/runbook/image-onerror"
   - id: sql-001
     description: "Detect SQL injection patterns"
-    pattern: "(?i)\b(SELECT|INSERT|UPDATE|DELETE|WHERE|OR|AND|UNION|DROP|EXEC|ALTER|CREATE|MERGE)\b[^;]*?('|\")?[^;]*?('|\")?$"
+    pattern: "(?i)\b(SELECT|INSERT|UPDATE|DELETE|WHERE|OR|AND|UNION|DROP|EXEC|ALTER|CREATE|MERGE)\b[^;]*?('|")?[^;]*?('|")?$"
     severity: "high"
     context: "Look for common SQL keywords and patterns indicative of SQL injection, not preceded or followed by comments or documentation."
     test_cases:
@@ -138,6 +138,18 @@ rules:
       - input: "var username='user'"
         expected: "false"
     estimated_fp_rate: "8%"
-    runbook_link: "https://example.com/runbook/hardcoded-secrets"
+    runbook_link: "https://example.com/runbook/hardcoded-secrets
+  - id: lateral-001
+    description: "Detect lateral movement through PowerShell commands"
+    pattern: "(Invoke-Expression|Invoke-Command|Start-Process|Set-ExecutionPolicy|New-PSSession|Enter-PSSession)\s+.*"
+    severity: "high"
+    context: "Monitor for PowerShell commands that indicate lateral movement within the network."
+    test_cases:
+      - input: "Invoke-Expression 'maliciousCommand'"
+        expected: "true"
+      - input: "Get-Process"
+        expected: "false"
+    estimated_fp_rate: "6%"
+    runbook_link: "https://example.com/runbook/lateral-movement-detection"
 
 # Regular review schedule: Every 3 months to ensure detection rules are up-to-date
