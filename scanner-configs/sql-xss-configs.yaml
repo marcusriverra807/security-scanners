@@ -43,6 +43,18 @@ rules:
     description: "Detect usage of deprecated HTML attributes"
     pattern: "(on\w+)=['\"]?[^'\"]*['\"]?"
     severity: "medium"
+  - id: new-xss-004
+    description: "Detect script tag with attributes"
+    pattern: "<script[^>]*\s+(src|data|onerror|onclick)=[^>]*>"
+    severity: "high"
+  - id: new-xss-005
+    description: "Detect dynamic script execution"
+    pattern: "(eval|setTimeout|setInterval|execCommand|importScripts|document\.write|innerHTML)\s*\("
+    severity: "high"
+  - id: new-xss-006
+    description: "Detect inline event handlers"
+    pattern: "on\w+=['\"]?[^'\"]*['\"]?"
+    severity: "medium"
   - id: sql-001
     description: "Detect SQL injection patterns"
     pattern: "(\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bWHERE\b|\bOR\b|\bAND\b|\bUNION\b|--|/\*.*?\*/).*?(['\"]?[^;]*?['\"]?)(?<!\w)"
