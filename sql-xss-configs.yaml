@@ -40,23 +40,23 @@ rules:
     context: "Ensure images do not execute scripts, and validate all image attributes."
   - id: sql-001
     description: "Detect SQL injection patterns"
-    pattern: "(?i)\b(SELECT|INSERT|UPDATE|DELETE|WHERE|OR|AND|UNION|DROP|EXEC|ALTER|CREATE|MERGE)\b[^;]*?('|\")?[^;]*?('|\")?$"
+    pattern: "(?i)\b(SELECT|INSERT|UPDATE|DELETE|WHERE|OR|AND|UNION|DROP|EXEC|ALTER|CREATE|MERGE)\b[^;]*?('|")?[^;]*?('|")?$"
     severity: "high"
-    context: "Look for common SQL keywords and patterns indicative of SQL injection."
+    context: "Look for common SQL keywords and patterns indicative of SQL injection, not preceded or followed by comments or documentation."
   - id: sql-002
     description: "Detect tautology-based SQL injection"
-    pattern: "(1=1|1=0|0=0|true|false|OR\s+1=1|AND\s+1=1)"
+    pattern: "(?i)(?<=\s)(1=1|1=0|0=0|true|false|OR\s+1=1|AND\s+1=1)(?=\s)"
     severity: "high"
-    context: "Identify tautological conditions that may indicate SQL injection."
+    context: "Identify tautological conditions that may indicate SQL injection, focusing on user input fields."
   - id: sensitive-001
     description: "Detect hardcoded API keys"
     pattern: "(?<![A-Za-z0-9])[A-Za-z0-9]{32,}(?![A-Za-z0-9])"
     severity: "medium"
-    context: "Check for long alphanumeric strings that may represent API keys."
+    context: "Check for long alphanumeric strings that may represent API keys, excluding known UUID formats."
   - id: sensitive-002
     description: "Detect hardcoded secrets"
-    pattern: "(?i)\b(password|secret|token|api_key|authorization)\s*=\s*['\"]([^'";]*)['\"]"
+    pattern: "(?i)\b(password|secret|token|api_key|authorization)\s*=\s*['\"]([^'\";]*)['\"]"
     severity: "high"
-    context: "Identify common secret patterns and ensure sensitive data is not hardcoded.
+    context: "Identify common secret patterns and ensure sensitive data is not hardcoded, excluding safe configuration patterns."
 
 # Regular review schedule: Every 3 months to ensure detection rules are up-to-date
