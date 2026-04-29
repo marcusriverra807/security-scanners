@@ -28,7 +28,18 @@ The following patterns will be monitored for potential SQL injection attempts:
 6. **Logging and Monitoring**:  
    - Implement logging mechanisms for all failed queries or suspicious patterns to analyze attack attempts.
 
+7. **New Detection Rules**:
+   - **Advanced SQL Injection Patterns**  
+     - **Rule**: Monitor for time-based blind injection patterns.  
+     - **Pattern**: `1; WAITFOR DELAY '00:00:05'`  
+     - **Rule ID**: `sql-005`
+     - **Severity**: High
+     - **Context**: Identify attempts to infer database information using time delays.
+     - **Test Cases**:
+       - Input: `1; WAITFOR DELAY '00:00:05'` (Expected: true)
+       - Input: `SELECT * FROM users;` (Expected: false)
+
 ## Recommended Actions
 - Review the application's SQL query handling to ensure proper parameterization.  
 - Implement Web Application Firewall (WAF) rules to block known attack patterns.  
-- Regularly update the detection patterns based on emerging threats and trends in SQL injection techniques.  
+- Regularly update the detection patterns based on emerging threats and trends in SQL injection techniques.
