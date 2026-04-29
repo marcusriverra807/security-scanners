@@ -1,0 +1,5 @@
+# Enhanced XSS Detection Rules
+
+- rule_id: enhanced_xss_rule
+  description: Detects XSS using advanced patterns
+  regex: '(<.*?\s+on\w+\s*=)'\n  action: alert
