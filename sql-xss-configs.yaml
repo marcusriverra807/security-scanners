@@ -77,5 +77,53 @@ rules:
         expected: "false"
     estimated_fp_rate: "4%"
     runbook_link: "https://example.com/runbook/time-based-sql-injection"
+  - id: sql-006
+    description: "Detect SQL injection with UNION-based techniques"
+    pattern: "(?i)UNION\s*SELECT"
+    severity: "high"
+    context: "Identify SQL injections that use UNION to combine results from multiple SELECT statements."
+    test_cases:
+      - input: "SELECT * FROM users UNION SELECT * FROM admin;"
+        expected: "true"
+      - input: "SELECT * FROM users;"
+        expected: "false"
+    estimated_fp_rate: "3%"
+    runbook_link: "https://example.com/runbook/sql-union-injection"
+  - id: sql-007
+    description: "Detect SQL injection with comment-based techniques"
+    pattern: "--\s*|#\s*"
+    severity: "high"
+    context: "Capture SQL injection attempts that use comments to manipulate queries."
+    test_cases:
+      - input: "SELECT * FROM users WHERE id=1; -- comment"
+        expected: "true"
+      - input: "SELECT * FROM users;"
+        expected: "false"
+    estimated_fp_rate: "2%"
+    runbook_link: "https://example.com/runbook/sql-comment-injection"
+  - id: sql-008
+    description: "Detect SQL injection with nested queries"
+    pattern: "(?i)(SELECT|FROM)\s*\((.*?)\)"
+    severity: "high"
+    context: "Identify SQL injections that use nested SELECT queries."
+    test_cases:
+      - input: "SELECT * FROM (SELECT * FROM users) AS subquery;"
+        expected: "true"
+      - input: "SELECT * FROM users;"
+        expected: "false"
+    estimated_fp_rate: "3%"
+    runbook_link: "https://example.com/runbook/sql-nested-injection"
+  - id: xss-005
+    description: "Detect XSS through event handler attributes"
+    pattern: "\bon\w+\s*=\s*['\"]([^'\"]+)['\"]"
+    severity: "high"
+    context: "Monitor for inline event handlers that could execute malicious scripts."
+    test_cases:
+      - input: "<div onclick='alert(1)'>Click me</div>"
+        expected: "true"
+      - input: "<div>No click</div>"
+        expected: "false"
+    estimated_fp_rate: "4%"
+    runbook_link: "https://example.com/runbook/event-handler-injection"
 
 # Regular review schedule: Every 3 months to ensure detection rules are up-to-date
