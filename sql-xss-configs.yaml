@@ -40,7 +40,7 @@ rules:
     context: "Ensure images do not execute scripts, and validate all image attributes."
   - id: sql-001
     description: "Detect SQL injection patterns"
-    pattern: "(?i)\b(SELECT|INSERT|UPDATE|DELETE|WHERE|OR|AND|UNION|DROP|EXEC|ALTER|CREATE|MERGE)\b[^;]*?('|")?[^;]*?('|")?$"
+    pattern: "(?i)\b(SELECT|INSERT|UPDATE|DELETE|WHERE|OR|AND|UNION|DROP|EXEC|ALTER|CREATE|MERGE)\b[^;]*?('|\")?[^;]*?('|\")?$"
     severity: "high"
     context: "Look for common SQL keywords and patterns indicative of SQL injection."
   - id: sql-002
