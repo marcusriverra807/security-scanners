@@ -1,0 +1,51 @@
+# Synthetic test cases for tuning and validating XSS detection rules
+
+- rule: new_xss_002_dom_based_xss
+  description: "Test DOM-based XSS detection with various dangerous DOM methods and inline event handlers"
+  test_cases:
+    - input: '<div onclick="alert(1)">Click me</div>'
+      expected: true
+    - input: '<script>document.write("XSS")</script>'
+      expected: true
+    - input: '<body onload=eval("alert(1)")>'
+      expected: true
+    - input: '<div>Safe content</div>'
+      expected: false
+
+- rule: new_xss_006_inline_event_handlers
+  description: "Test detection of inline event handlers in HTML elements"
+  test_cases:
+    - input: '<button onclick="doSomething()">Click</button>'
+      expected: true
+    - input: '<input onfocus="alert(1)" />'
+      expected: true
+    - input: '<div>No event here</div>'
+      expected: false
+
+- rule: new_xss_007_svg_element_attribute_injection
+  description: "Test SVG element attribute injection with event handlers"
+  test_cases:
+    - input: '<svg onload="alert(1)"></svg>'
+      expected: true
+    - input: '<svg><circle cx="50" cy="50" r="40"/></svg>'
+      expected: false
+
+- rule: new_xss_008_html_entity_encoded_script_injection
+  description: "Test detection of HTML entity encoded script injection"
+  test_cases:
+    - input: '&lt;script&gt;alert(1)&lt;/script&gt;'
+      expected: true
+    - input: '&amp;#x3c;script&amp;#x3e;alert(1)&amp;#x3c;/script&amp;#x3e;'
+      expected: true
+    - input: 'Regular text &lt; not a script'
+      expected: false
+
+- rule: new_xss_010_dangerous_dom_methods
+  description: "Test detection of dangerous DOM methods usage"
+  test_cases:
+    - input: 'element.innerHTML = "<img src=x onerror=alert(1) />";'
+      expected: true
+    - input: 'setTimeout("alert('XSS')", 1000);'
+      expected: true
+    - input: 'console.log("safe method")'
+      expected: false
