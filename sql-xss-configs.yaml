@@ -31,9 +31,25 @@ rules:
     description: "Detect image onerror injection"
     pattern: "<img[^>]*?(onerror=\".*?\"|onload=\".*?\")"
     severity: "high"
+  - id: xss-008
+    description: "Detect additional event handler injections"
+    pattern: "(onerror|onclick|onload|onfocus|onblur|onmouseenter|onmouseleave|onkeydown|onkeyup)=\".*?\""
+    severity: "high"
+  - id: xss-009
+    description: "Detect common XSS payload functions"
+    pattern: "(alert|document\\.cookie|eval|innerHTML)\\s*\("
+    severity: "high"
+  - id: xss-010
+    description: "Detect javascript: in href attribute"
+    pattern: "href=\"javascript:[^\"]*\""
+    severity: "high"
+  - id: xss-011
+    description: "Detect CSS expression usage"
+    pattern: "style=\".*expression\(.*\).*\""
+    severity: "medium"
   - id: sql-001
     description: "Detect SQL injection patterns"
-    pattern: "(\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bWHERE\b|\bOR\b|\bAND\b|\bUNION\b).*?('|")?[^;]*?('|")?"
+    pattern: "(\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bWHERE\b|\bOR\b|\bAND\b|\bUNION\b).*?('|\")?[^;]*?('|\")?"
     severity: "high"
   - id: sql-002
     description: "Detect tautology-based SQL injection"
@@ -45,5 +61,5 @@ rules:
     severity: "high"
   - id: sensitive-002
     description: "Detect hardcoded secrets"
-    pattern: "(password|secret|token|api_key)\s*=\s*('|")[^'";]*('|")"
+    pattern: "(password|secret|token|api_key)\s*=\s*('|\")[^'";]*('|\")"
     severity: "high"
