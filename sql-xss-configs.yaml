@@ -29,7 +29,7 @@ rules:
     runbook_link: "https://example.com/runbook/xss-detection"
   - id: xss-002
     description: "Detect JavaScript URLs with refined pattern"
-    pattern: "javascript:(?!void\\(0\\))[^"]*|data:text/html[^"]*|onerror\\s*=\\s*['\"javascript:[^\'\"]*['\"]"
+    pattern: "javascript:(?!void\\(0\\))[^\"]*|data:text/html[^\"]*|onerror\\s*=\\s*['\"javascript:[^\'\"]*['\"]"
     severity: "high"
     context: "Avoid untrusted JavaScript URLs and inline event handlers that execute JavaScript, excluding common benign void(0) calls."
     test_cases:
