@@ -61,6 +61,18 @@ rules:
     description: "Detect reflected XSS"
     pattern: "(?<=>)(.*?)(<script.*?>|javascript:|on\\w+=|data:text/html|eval\\()"
     severity: "high"
+  - id: new-xss-007
+    description: "Detect XSS via template injection patterns"
+    pattern: "(\\{\\{.*?\\}\}|\\{\\%.*?\\%\\})"
+    severity: "high"
+  - id: new-xss-008
+    description: "Detect XSS via malicious iframe src attribute"
+    pattern: "<iframe[^>]*src=['\"]?javascript:[^'\"]*['\"]?"
+    severity: "high"
+  - id: new-xss-009
+    description: "Detect XSS via malicious CSS expressions"
+    pattern: "expression\\s*\\("
+    severity: "medium"
 
 # SQL Injection Detection Rules
 
@@ -77,6 +89,14 @@ rules:
     description: "Detect SQL injection via time-based attacks"
     pattern: "(SLEEP\\(|WAITFOR|BENCHMARK\\()"
     severity: "high"
+  - id: new-sql-002
+    description: "Detect SQL injection via comment-based obfuscation"
+    pattern: "(--|#|\/\\*.*?\\*\/)(?=.*?(select|union|insert|update|delete|drop))"
+    severity: "high"
+  - id: new-sql-003
+    description: "Detect SQL injection using hexadecimal encoding"
+    pattern: "0x[0-9a-fA-F]{2,}"
+    severity: "medium"
 
 # Sensitive Information Detection Rules
 
