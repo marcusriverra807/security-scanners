@@ -13,6 +13,10 @@ positive_tests = {
         'document.write("test")',
         '<div onclick=\"alert(1)\">',
     ],
+    'new_xss_003_obfuscated_script_tags': [
+        '<script type="text/base64">PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==</script>',  # base64 encoded script
+        '<script type="text/hex">3c7363726970743e616c6572742831293c2f7363726970743e</script>',  # hex encoded script
+    ],
     'new_xss_004_script_tag_malicious_attributes': [
         '<script src="javascript:alert(1)"></script>',
     ],
@@ -44,6 +48,10 @@ negative_tests = {
     ],
     'new_xss_002_dom_based_xss': [
         'safe DOM methods without malicious payload',
+    ],
+    'new_xss_003_obfuscated_script_tags': [
+        '<script type="text/base64">aGFybWxlc3M=</script>',  # base64 for 'harmless'
+        '<script type="text/hex">4861726d6c657373</script>',  # hex for 'harmless'
     ],
     'new_xss_004_script_tag_malicious_attributes': [
         '<script src="https://trusted.com/script.js"></script>',
