@@ -19,6 +19,7 @@ This task list is based on recent tuning plans and documentation for new XSS det
   - Monitor client-side script complexity.
   - Implement context-aware filtering.
   - Validate against known benign DOM manipulations.
+  - Add specific tuning for ignoring safe DOM content like '<div>Safe content</div>'.
 
 ### Rule ID: new-xss-004 (Script tag with malicious attributes)
 - Severity: High
@@ -42,6 +43,7 @@ This task list is based on recent tuning plans and documentation for new XSS det
   - Differentiate between malicious and legitimate inline handlers.
   - Use contextual analysis.
   - Whitelist common safe handlers.
+  - Add tuning to prevent flagging safe content like '<div>No event here</div>'.
 
 ### Rule ID: new-xss-007 (SVG element attribute injection)
 - Severity: High
@@ -50,6 +52,7 @@ This task list is based on recent tuning plans and documentation for new XSS det
   - Focus on known SVG injection patterns.
   - Tune based on application-specific SVG usage.
   - Monitor unusual attribute values.
+  - Add tuning to exclude safe SVG elements like '<svg><circle cx="50" cy="50" r="40"/></svg>'.
 
 ### Rule ID: new-xss-008 (HTML entity encoded script injection)
 - Severity: High
@@ -58,6 +61,7 @@ This task list is based on recent tuning plans and documentation for new XSS det
   - Analyze encoding variations.
   - Tune for common obfuscation techniques.
   - Validate against benign encoded content.
+  - Add tuning to ignore safe encoded text such as 'Regular text &lt; not a script'.
 
 ### Rule ID: new-xss-009 (Iframe injection attempts)
 - Severity: High
@@ -74,6 +78,7 @@ This task list is based on recent tuning plans and documentation for new XSS det
   - Contextualize usage of DOM methods.
   - Implement behavior-based filtering.
   - Review false positives regularly.
+  - Add tuning to exclude safe methods like 'console.log("safe method")'.
 
 ---
 
