@@ -63,7 +63,7 @@
     {
       "rule_id": "new-xss-010",
       "description": "Test dangerous DOM method innerHTML",
-      "input": "element.innerHTML = '<img src=x onerror=alert(1)>';}"
+      "input": "element.innerHTML = '<img src=x onerror=alert(1)>';}
     },
     {
       "rule_id": "new-xss-011",
@@ -124,6 +124,31 @@
       "rule_id": "new-xss-022",
       "description": "Test XSS embedded in JSON strings",
       "input": "{\"username\":\"<script>alert(1)</script>\"}"
+    },
+    {
+      "rule_id": "new-xss-023",
+      "description": "Test less common event handlers (onblur, onfocus, onsubmit)",
+      "input": "<input type='text' onblur='alert(1)' onfocus='alert(1)' onsubmit='alert(1)'>"
+    },
+    {
+      "rule_id": "new-xss-024",
+      "description": "Test obfuscated JavaScript URL with escape sequences",
+      "input": "<a href='javascript\x3Aalert(1)'>Click</a>"
+    },
+    {
+      "rule_id": "new-xss-025",
+      "description": "Test double encoded script tag",
+      "input": "%253Cscript%253Ealert(1)%253C/script%253E"
+    },
+    {
+      "rule_id": "new-xss-026",
+      "description": "Test obfuscated event handler with encoded characters",
+      "input": "<img src='x' onerror='al\x65rt(1)'>"
+    },
+    {
+      "rule_id": "new-xss-027",
+      "description": "Test obfuscated eval function call",
+      "input": "<script>ev\x61l('alert(1)')</script>"
     }
   ]
 }
