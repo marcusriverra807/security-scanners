@@ -59,6 +59,14 @@ rules:
     description: "Detect reflected XSS"
     pattern: "(?<=>)(.*?)(<script.*?>|javascript:|on\w+=|data:text/html|eval\\()"
     severity: "high"
+  - id: xss-mutation-001
+    description: "Detect mutation-based XSS attack patterns"
+    pattern: "(DOMParser|MutationObserver|setAttribute|createElement)\s*\("
+    severity: "high"
+  - id: xss-evasion-001
+    description: "Detect advanced XSS evasion techniques"
+    pattern: "(\bfromCharCode\b|\bcharCodeAt\b|\bString\.fromCharCode\b)"
+    severity: "high"
   - id: sql-001
     description: "Detect SQL injection patterns"
     pattern: "(?<!\w)(\bSELECT\b|\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bWHERE\b|\bOR\b|\bAND\b|\bUNION\b|--|/\*.*?\*/)(?!.*\bFROM\b).*?(['\"]?[^;]*?['\"]?)(?<!\w)"
