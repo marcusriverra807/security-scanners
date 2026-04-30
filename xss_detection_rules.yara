@@ -3,10 +3,13 @@ rule new_xss_001_url_encoding_attacks {
         description = "Detect URL encoding attacks"
         severity = "high"
         false_positive_rate = "2%"
+        version = "1.1"
+        last_updated = "2024-06-01"
     strings:
         $url_encoded_payload = /%[0-9a-fA-F]{2}/
         $double_encoded_payload = /%25[0-9a-fA-F]{2}/
         $base64_encoded_payload = /(?:[A-Za-z0-9+\/]{4}){2,}/
+        $mixed_encoded_js_url = /javascript\s*:\s*(?:%[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}|\x[0-9a-fA-F]{2}|\.)+/i
     condition:
         any of them
 }
@@ -16,10 +19,14 @@ rule new_xss_002_dom_based_xss {
         description = "Detect DOM-based XSS"
         severity = "high"
         false_positive_rate = "3%"
+        version = "1.1"
+        last_updated = "2024-06-01"
     strings:
         $dangerous_dom_methods = /document\.write|innerHTML|eval|setTimeout\(\s*['"]|setInterval\(\s*['"]/
         $inline_event_handlers = /on\w+=\"[^\"]*\"|on\w+='[^']*'/
         $custom_event_handlers = /onmousewheel|onmouseenter|onmouseleave|onpointerdown|onpointerup|ontouchstart|ontouchend/
+        $shadow_dom_manipulation = /attachShadow\(|shadowRoot\./
+        $custom_elements = /customElements\.define\(/ 
     condition:
         any of them
 }
@@ -29,6 +36,8 @@ rule new_xss_003_obfuscated_script_tags {
         description = "Detect obfuscated script tags with base64 or hex encoding"
         severity = "high"
         false_positive_rate = "3%"
+        version = "1.1"
+        last_updated = "2024-06-01"
     strings:
         $base64_script = /<script\s+type=\"text\/base64\">[A-Za-z0-9+\/]+=*<\/script>/
         $hex_encoded_script = /<script\s+type=\"text\/hex\">[0-9A-Fa-f]+<\/script>/
@@ -43,6 +52,8 @@ rule new_xss_004_script_tag_malicious_attributes {
         description = "Detect script tag with malicious attributes"
         severity = "high"
         false_positive_rate = "2%"
+        version = "1.1"
+        last_updated = "2024-06-01"
     strings:
         $script_tag = /<script[^>]*>/
         $malicious_attribute = /src\s*=\s*['"]?javascript:/
@@ -55,6 +66,8 @@ rule new_xss_005_dynamic_script_execution {
         description = "Detect dynamic script execution"
         severity = "high"
         false_positive_rate = "1%"
+        version = "1.1"
+        last_updated = "2024-06-01"
     strings:
         $dynamic_execution = /eval\(|Function\(/ 
     condition:
@@ -66,6 +79,8 @@ rule new_xss_006_inline_event_handlers {
         description = "Detect inline event handlers"
         severity = "high"
         false_positive_rate = "3%"
+        version = "1.1"
+        last_updated = "2024-06-01"
     strings:
         $inline_event = /on\w+=\"[^\"]*\"|on\w+='[^']*'/
     condition:
@@ -77,6 +92,8 @@ rule new_xss_007_svg_element_attribute_injection {
         description = "Detect SVG element attribute injection"
         severity = "high"
         false_positive_rate = "3%"
+        version = "1.1"
+        last_updated = "2024-06-01"
     strings:
         $svg_injection = /<svg[^>]*on\w+=\"[^\"]*\"/i
     condition:
@@ -88,6 +105,8 @@ rule new_xss_008_html_entity_encoded_script_injection {
         description = "Detect HTML entity encoded script injection"
         severity = "high"
         false_positive_rate = "3%"
+        version = "1.1"
+        last_updated = "2024-06-01"
     strings:
         $html_entity_script = /&lt;script&gt;|&amp;#x3c;script&amp;#x3e;/i
     condition:
@@ -99,6 +118,8 @@ rule new_xss_009_iframe_injection_attempts {
         description = "Detect iframe injection attempts"
         severity = "high"
         false_positive_rate = "2%"
+        version = "1.1"
+        last_updated = "2024-06-01"
     strings:
         $iframe_tag = /<iframe[^>]*>/
         $suspicious_src = /src\s*=\s*['"]?(javascript:|data:text\/html)/
@@ -111,6 +132,8 @@ rule new_xss_010_dangerous_dom_methods {
         description = "Detect dangerous DOM methods like innerHTML"
         severity = "high"
         false_positive_rate = "5%"
+        version = "1.1"
+        last_updated = "2024-06-01"
     strings:
         $dangerous_dom = /innerHTML|document\.write|eval|setTimeout|setInterval/
     condition:
@@ -122,6 +145,8 @@ rule new_xss_011_js_api_abuse {
         description = "Detect abuse of modern JavaScript APIs like MutationObserver and Proxy"
         severity = "high"
         false_positive_rate = "3%"
+        version = "1.1"
+        last_updated = "2024-06-01"
     strings:
         $mutation_observer = /MutationObserver/
         $proxy = /Proxy\s*\(/ 
@@ -134,6 +159,8 @@ rule new_xss_012_unicode_escape_obfuscation {
         description = "Detect obfuscated payloads using Unicode escape sequences"
         severity = "high"
         false_positive_rate = "4%"
+        version = "1.1"
+        last_updated = "2024-06-01"
     strings:
         $unicode_escape = /\\u[0-9a-fA-F]{4}/
     condition:
@@ -145,6 +172,8 @@ rule new_xss_013_postmessage_abuse {
         description = "Detect suspicious usage of postMessage API in scripts"
         severity = "medium"
         false_positive_rate = "5%"
+        version = "1.1"
+        last_updated = "2024-06-01"
     strings:
         $post_message = /postMessage\s*\(/ 
     condition:
@@ -156,10 +185,41 @@ rule new_xss_014_template_literal_injection {
         description = "Detect potential XSS with template literals containing embedded expressions"
         severity = "high"
         false_positive_rate = "4%"
+        version = "1.1"
+        last_updated = "2024-06-01"
     strings:
         $template_literal = /`.*\$\{.*\}.*`/s
+        $tagged_template = /\w+`.*\$\{.*\}.*`/s
     condition:
-        $template_literal
+        any of them
+}
+
+rule new_xss_015_scriptless_svg_mathml_injection {
+    meta:
+        description = "Detect scriptless XSS using SVG filters and MathML"
+        severity = "high"
+        false_positive_rate = "5%"
+        version = "1.0"
+        last_updated = "2024-06-01"
+    strings:
+        $svg_filter = /<filter[^>]*id=["']?xss_filter["']?>/i
+        $mathml_scriptless = /<math[^>]*><mtext>.*<\/mtext><\/math>/i
+    condition:
+        any of them
+}
+
+rule new_xss_016_websocket_serviceworker_payload {
+    meta:
+        description = "Detect XSS payloads delivered via WebSocket and Service Workers"
+        severity = "high"
+        false_positive_rate = "3%"
+        version = "1.0"
+        last_updated = "2024-06-01"
+    strings:
+        $websocket = /WebSocket\s*\(/i
+        $service_worker = /ServiceWorker\s*\.register\(/i
+    condition:
+        any of them
 }
 
 # XSS Detection Rules Review and Update Plan
