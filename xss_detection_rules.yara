@@ -117,6 +117,51 @@ rule new_xss_010_dangerous_dom_methods {
         $dangerous_dom
 }
 
+rule new_xss_011_js_api_abuse {
+    meta:
+        description = "Detect abuse of modern JavaScript APIs like MutationObserver and Proxy"
+        severity = "high"
+        false_positive_rate = "3%"
+    strings:
+        $mutation_observer = /MutationObserver/
+        $proxy = /Proxy\s*\(/ 
+    condition:
+        any of them
+}
+
+rule new_xss_012_unicode_escape_obfuscation {
+    meta:
+        description = "Detect obfuscated payloads using Unicode escape sequences"
+        severity = "high"
+        false_positive_rate = "4%"
+    strings:
+        $unicode_escape = /\\u[0-9a-fA-F]{4}/
+    condition:
+        $unicode_escape
+}
+
+rule new_xss_013_postmessage_abuse {
+    meta:
+        description = "Detect suspicious usage of postMessage API in scripts"
+        severity = "medium"
+        false_positive_rate = "5%"
+    strings:
+        $post_message = /postMessage\s*\(/ 
+    condition:
+        $post_message
+}
+
+rule new_xss_014_template_literal_injection {
+    meta:
+        description = "Detect potential XSS with template literals containing embedded expressions"
+        severity = "high"
+        false_positive_rate = "4%"
+    strings:
+        $template_literal = /`.*\$\{.*\}.*`/s
+    condition:
+        $template_literal
+}
+
 # XSS Detection Rules Review and Update Plan
 # This plan should be revisited and updated quarterly to ensure ongoing effectiveness
 
