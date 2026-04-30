@@ -3,8 +3,8 @@ rule new_xss_001_url_encoding_attacks {
         description = "Detect URL encoding attacks"
         severity = "high"
         false_positive_rate = "2%"
-        version = "1.4"
-        last_updated = "2024-06-30"
+        version = "1.5"
+        last_updated = "2024-07-12"
     strings:
         $url_encoded_payload = /%[0-9a-fA-F]{2}/
         $double_encoded_payload = /%(25|2525)[0-9a-fA-F]{2}/
@@ -12,6 +12,7 @@ rule new_xss_001_url_encoding_attacks {
         $base64_encoded_payload = /(?:[A-Za-z0-9+\/]{4}){2,}/
         $mixed_encoded_js_url = /javascript\s*:\s*(?:%[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}|\x[0-9a-fA-F]{2}|\.)+/i
         $multi_level_encoded_payload = /(%25){2,}[0-9a-fA-F]{2}/  // multi-level encoded payload
+        $unicode_encoded_payload = /\\u[0-9a-fA-F]{4}/  // Unicode encoded characters
     condition:
         any of them
 }
@@ -21,12 +22,12 @@ rule new_xss_002_dom_based_xss {
         description = "Detect DOM-based XSS"
         severity = "high"
         false_positive_rate = "2%"
-        version = "1.4"
-        last_updated = "2024-06-30"
+        version = "1.5"
+        last_updated = "2024-07-12"
     strings:
         $dangerous_dom_methods = /document\.write|innerHTML|eval|setTimeout\(\s*['\"]|setInterval\(\s*['\"]|insertAdjacentHTML/  
-        $inline_event_handlers = /on\w+=\"[^\"]*\"|on\w+='[^']*'/
-        $custom_event_handlers = /onmousewheel|onmouseenter|onmouseleave|onpointerdown|onpointerup|ontouchstart|ontouchend|onpointercancel|onpointermove|onpointerover|onpointerout|onwheel|onfocus|onblur|oninput|onchange|onselect/  // Expanded list
+        $inline_event_handlers = /on\w+="[^"]*"|on\w+='[^']*'/
+        $custom_event_handlers = /onmousewheel|onmouseenter|onmouseleave|onpointerdown|onpointerup|ontouchstart|ontouchend|onpointercancel|onpointermove|onpointerover|onpointerout|onwheel|onfocus|onblur|oninput|onchange|onselect|ondblclick|oncontextmenu/  // Expanded list including dblclick and contextmenu
         $shadow_dom_manipulation = /attachShadow\(|shadowRoot\./
         $custom_elements = /customElements\.define\(/ 
     condition:
@@ -38,8 +39,8 @@ rule new_xss_003_obfuscated_script_tags {
         description = "Detect obfuscated script tags with base64 or hex encoding"
         severity = "high"
         false_positive_rate = "3%"
-        version = "1.4"
-        last_updated = "2024-06-30"
+        version = "1.5"
+        last_updated = "2024-07-12"
     strings:
         $base64_script = /<script\s+type=\"text\/base64\">[A-Za-z0-9+\/]+=*<\/script>/
         $hex_encoded_script = /<script\s+type=\"text\/hex\">[0-9A-Fa-f]+<\/script>/
@@ -54,13 +55,14 @@ rule new_xss_011_js_api_abuse {
         description = "Detect abuse of modern JavaScript APIs like MutationObserver, Proxy, WebAssembly, and SharedArrayBuffer"
         severity = "high"
         false_positive_rate = "3%"
-        version = "1.4"
-        last_updated = "2024-06-30"
+        version = "1.5"
+        last_updated = "2024-07-12"
     strings:
         $mutation_observer = /MutationObserver/
         $proxy = /Proxy\s*\(/ 
         $webassembly = /WebAssembly\.instantiate/
         $shared_array_buffer = /SharedArrayBuffer/
+        $atomics = /Atomics/  // New addition for concurrency APIs abuse
     condition:
         any of them
 }
@@ -70,13 +72,14 @@ rule new_xss_013_postmessage_abuse {
         description = "Detect suspicious usage of postMessage API in scripts, including origin bypass attempts"
         severity = "medium"
         false_positive_rate = "5%"
-        version = "1.3"
-        last_updated = "2024-06-30"
+        version = "1.4"
+        last_updated = "2024-07-12"
     strings:
         $post_message = /postMessage\s*\(/ 
         $origin_bypass = /postMessage\s*\([^,]+,\s*['"]*\*['"]*\)/
+        $structured_clone = /StructuredClone\(\)/  // New pattern for new postMessage payload method
     condition:
-        $post_message or $origin_bypass
+        $post_message or $origin_bypass or $structured_clone
 }
 
 rule new_xss_017_csp_bypass_techniques {
@@ -84,12 +87,13 @@ rule new_xss_017_csp_bypass_techniques {
         description = "Detect emerging Content Security Policy (CSP) bypass techniques"
         severity = "high"
         false_positive_rate = "4%"
-        version = "1.2"
-        last_updated = "2024-06-30"
+        version = "1.3"
+        last_updated = "2024-07-12"
     strings:
         $csp_bypass = /style-src\s+unsafe-inline|script-src\s+unsafe-inline|script-src-elem\s+unsafe-inline|default-src\s+data:/
+        $nonce_bypass = /nonce-\w+\s+unsafe-inline/  // New pattern for nonce bypass
     condition:
-        $csp_bypass
+        $csp_bypass or $nonce_bypass
 }
 
 rule new_xss_018_webrtc_serviceworker_abuse {
@@ -97,11 +101,12 @@ rule new_xss_018_webrtc_serviceworker_abuse {
         description = "Detect abuse of WebRTC and ServiceWorkers for XSS payload delivery"
         severity = "high"
         false_positive_rate = "3%"
-        version = "1.2"
-        last_updated = "2024-06-30"
+        version = "1.3"
+        last_updated = "2024-07-12"
     strings:
         $webrtc = /RTCPeerConnection|getUserMedia/
         $service_worker_register = /ServiceWorker\.register\(/i
+        $service_worker_message = /self\.addEventListener\(['"]message['"]\)/  // New pattern for service worker message handling
     condition:
         any of them
 }
@@ -111,8 +116,8 @@ rule new_xss_021_heuristic_ml_based_xss_detection {
         description = "Heuristic and ML-based XSS detection placeholder rule"
         severity = "high"
         false_positive_rate = "TBD"
-        version = "1.1"
-        last_updated = "2024-06-30"
+        version = "1.2"
+        last_updated = "2024-07-12"
         notes = "This rule is a placeholder and requires integration with an external ML detection engine via YARA external variables or hooks."
     strings:
         $heuristic_pattern = /<script.*?>.*?eval|Function\(|setTimeout|setInterval|document\.cookie|window\.location/si
@@ -125,52 +130,47 @@ rule new_xss_022_dynamic_behavioral_monitoring {
         description = "Detect dynamic and behavioral indicators of XSS payload execution"
         severity = "high"
         false_positive_rate = "2%"
-        version = "1.0"
-        last_updated = "2024-06-30"
+        version = "1.1"
+        last_updated = "2024-07-12"
     strings:
         $eval_usage = /eval\(/i
         $function_constructor = /new Function\(/i
         $dynamic_script_injection = /document\.createElement\(['"]script['"]\)/i
         $script_append_child = /appendChild\(document\.createElement\(['"]script['"]\)\)/i
         $script_innerhtml_injection = /innerHTML\s*=\s*['"].*<script.*>.*<\/script>['"]/i
+        $proxy_usage = /Proxy\.revocable\(/  // New pattern for Proxy.revocable usage
     condition:
         any of them
 }
 
-# Updated XSS Detection Rules Review and Update Plan
-# This plan should be revisited and updated quarterly to ensure ongoing effectiveness
+// Added new rule for detecting suspicious use of WebSocket API in XSS attack delivery
+rule new_xss_023_websocket_abuse {
+    meta:
+        description = "Detect suspicious use of WebSocket API for XSS payload delivery"
+        severity = "medium"
+        false_positive_rate = "4%"
+        version = "1.0"
+        last_updated = "2024-07-12"
+    strings:
+        $websocket_open = /new WebSocket\(/i
+        $websocket_send = /WebSocket\.send\(/i
+    condition:
+        any of them
+}
 
-# 1. Quarterly Review
-# - Conduct comprehensive reviews of detection rule performance using detection logs and incident reports.
-# - Evaluate false positive and false negative rates.
+// Added new rule for detecting use of template literals for XSS payload obfuscation
+rule new_xss_024_template_literal_obfuscation {
+    meta:
+        description = "Detect use of JavaScript template literals for XSS payload obfuscation"
+        severity = "medium"
+        false_positive_rate = "5%"
+        version = "1.0"
+        last_updated = "2024-07-12"
+    strings:
+        $template_literal = /`[^`]*\${[^}]+}[^`]*`/  // Template literal with expression interpolation
+    condition:
+        $template_literal
+}
 
-# 2. Threat Intelligence Integration
-# - Incorporate latest threat intelligence on emerging XSS obfuscation and attack techniques.
-
-# 3. Rule Update and Tuning
-# - Update regex patterns and detection heuristics accordingly.
-# - Tune severity and false positive rate metadata.
-# - Integrate heuristic and machine learning based detection methods where feasible.
-
-# 4. Testing and Validation
-# - Use synthetic and real-world test cases to validate rule effectiveness after updates.
-# - Include ML model validation metrics and feedback.
-
-# 5. Documentation and Training
-# - Update documentation to reflect rule changes and new detection approaches.
-# - Provide training to detection engineers on new rule features, heuristics, and ML integration.
-
-# 6. Feedback Mechanism
-# - Establish channels for feedback from incident responders and users to refine rules.
-
-# 7. Automation Enhancements
-# - Automate continuous feedback collection and analysis pipelines.
-# - Integrate dynamic threat intelligence feeds via YARA external variables.
-# - Implement automated false positive and false negative reporting.
-# - Develop automated rule tuning and deployment pipelines.
-# - Explore automated ML model retraining and deployment.
-
-# 8. Reporting
-# - Generate quarterly reports on rule performance and planned updates.
-
-# End of updated review and update plan
+# Update commit message
+# Updated XSS detection rules based on common recent attack patterns, encoding methods, and emerging API abuses.
