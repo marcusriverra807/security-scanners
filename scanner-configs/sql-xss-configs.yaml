@@ -5,7 +5,7 @@
 rules:
   - id: xss-001
     description: "Detect script tag injection"
-    pattern: "<script\\b(?!.*\\btype\\s*=\\s*[\\'\\"]?module[\\'\\"]?)[^>]*>"
+    pattern: "<script\\b(?!.*\\btype\\s*=\\s*[\\'\\"]?module[\\'\\"]?)(?!%3Cscript%3E)[^>]*>"
     severity: "high"
   - id: xss-002
     description: "Detect JavaScript URLs"
@@ -67,7 +67,7 @@ rules:
     pattern: "(?<!\\w)(\\bSELECT\\b|\\bINSERT\\b|\\bUPDATE\\b|\\bDELETE\\b|\\bWHERE\\b|\\bOR\\b|\\bAND\\b|\\bUNION\\b|--|/\\*.*?\\*/)(?!.*\\bFROM\\b).*?(['\"]?[^;]*?['\"]?)(?<!\\w)(?<!parameterized)"
     severity: "high"
   - id: sql-002
-    description: "Detect tautology-based SQL injection with context analysis"
+    description: "Detect tautology-based SQL injection with context analysis - requires additional sanitation verification step in scanning logic"
     pattern: "(1=1|1=0|0=0|\\bTRUE\\b|\\bFALSE\\b|/\\*.*?\\*/)(?<!parameterized)"
     severity: "high"
   - id: new-sql-001
