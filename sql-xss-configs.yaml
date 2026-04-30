@@ -5,7 +5,7 @@
 rules:
   - id: xss-001
     description: "Detect script tag injection with improved accuracy"
-    pattern: "<script\\b[^>]*?(src=['\"'][^'\"']+['\"])?[^>]*>(?!.*(console\\.log|void\\(0\\)|alert|\\/\/.*|\/\\*.*\\*\/)).*?<\\/script>"
+    pattern: "<script\\b[^>]*?(src=['\"'][^'\"']+['\"])?[^>]*>(?!.*(console\\.log|void\\(0\\)|alert|\\/\\/.*|\/\\*.*\\*\/)).*?<\\/script>"
     severity: "high"
     context: "Check for script tags without valid sources and inline scripts, excluding common benign patterns like console.log, void(0), alert, and comments."
     test_cases:
@@ -35,7 +35,7 @@ rules:
     runbook_link: "https://example.com/runbook/xss-detection"
   - id: xss-002
     description: "Detect JavaScript URLs with refined pattern"
-    pattern: "(?i)javascript:(?!void\\(0\\))[^ \s'\";]+|data:text\/(?:html|javascript|plain)[^ \s'\"]+|onerror\\s*=\\s*['\"]javascript:[^'\"]*['\"]"
+    pattern: "(?i)javascript:(?!void\\(0\\))[^ \s'\";]+|data:text\\/(?:html|javascript|plain)[^ \s'\"]+|onerror\\s*=\\s*['\"]javascript:[^'\"]*['\"]"
     severity: "high"
     context: "Avoid untrusted JavaScript URLs and inline event handlers that execute JavaScript, excluding common benign void(0) calls."
     test_cases:
@@ -183,7 +183,7 @@ rules:
     runbook_link: "https://example.com/runbook/dom-xss"
   - id: xss-011
     description: "Detect base64 encoded XSS payloads"
-    pattern: "(?i)(base64_encode|data:text\/html;base64,|data:text\/javascript;base64,)"
+    pattern: "(?i)(base64_encode|data:text\\/html;base64,|data:text\\/javascript;base64,)"
     severity: "medium"
     context: "Detect base64 encoded payloads in URLs or scripts that may bypass simple pattern matching."
     test_cases:
@@ -229,5 +229,23 @@ rules:
         expected: "true"
       - input: "POST /login HTTP/1.1"
         expected: "false"
-    estimated_fp_rate: "3%"
-    runbook_link: "https://example.com/runbook/reflected-xss"
+  - id: xss-028
+    description: "Detect advanced and obfuscated XSS payloads including encoded, polyglot, and mutation-based DOM XSS"
+    pattern: "(?i)(%3Cscript%3E|document\\.write\\(|onerror\\s*=|eval\\(|window\\.postMessage\\(|new\\s+WebSocket\\(|<svg\\b[^>]*?xlink:href=|expression\\(|base64_encode|data:text\\/html;base64,|\\binnerHTML\\b|\\bmutationObserver\\b|\\bpostMessage\\b|\\bWebSocket\\b|\\bpolyglot\\b|\\bencoded\\b|\\bobfuscate\\b)"
+    severity: "high"
+    context: "Detects various advanced XSS attack vectors including encoded scripts, DOM-based XSS mutations, polyglot payloads, and obfuscated JavaScript execution methods."
+    test_cases:
+      - input: "%3Cscript%3Ealert(1)%3C/script%3E"
+        expected: "true"
+      - input: "document.write('<img src=x onerror=alert(1)>')"
+        expected: "true"
+      - input: "<svg><a xmlns:xlink='http://www.w3.org/1999/xlink' xlink:href='javascript:alert(1)'>Click me</a></svg>"
+        expected: "true"
+      - input: "window.postMessage('<img src=x onerror=alert(1)>', '*');"
+        expected: "true"
+      - input: "new WebSocket('ws://attacker.com').onmessage = function() { alert(1); };"
+        expected: "true"
+      - input: "'\"><svg/onload=alert(1)>"
+        expected: "true"
+    estimated_fp_rate: "4%"
+    runbook_link: "https://example.com/runbook/advanced-xss-detection"
