@@ -1,0 +1,59 @@
+{
+  "test_cases": [
+    {
+      "rule_id": "new-xss-038",
+      "description": "Test XSS payload in <math> HTML5 element",
+      "input": "<math><script>alert(1)</script></math>"
+    },
+    {
+      "rule_id": "new-xss-039",
+      "description": "Test XSS payload in <marquee> HTML5 element",
+      "input": "<marquee onstart=alert(1)>Scrolling text</marquee>"
+    },
+    {
+      "rule_id": "new-xss-040",
+      "description": "Test XSS via JavaScript Proxy object",
+      "input": "new Proxy({}, { get: () => { alert(1); } });"
+    },
+    {
+      "rule_id": "new-xss-041",
+      "description": "Test XSS via dynamic import() statement",
+      "input": "import('data:text/javascript,alert(1)');"
+    },
+    {
+      "rule_id": "new-xss-042",
+      "description": "Test XSS via CSS @import rule",
+      "input": "<style>@import 'javascript:alert(1)';</style>"
+    },
+    {
+      "rule_id": "new-xss-043",
+      "description": "Test XSS via CSS @font-face rule",
+      "input": "<style>@font-face { font-family: x; src: url('javascript:alert(1)'); } </style>"
+    },
+    {
+      "rule_id": "new-xss-044",
+      "description": "Test XSS in JSONP response",
+      "input": "callback(<script>alert(1)</script>);"
+    },
+    {
+      "rule_id": "new-xss-045",
+      "description": "Test DOM-based XSS via MutationObserver",
+      "input": "new MutationObserver(() => { alert(1); }).observe(document.body, { childList: true });"
+    },
+    {
+      "rule_id": "new-xss-046",
+      "description": "Test XSS via Web Storage API injection",
+      "input": "localStorage.setItem('xss', '<img src=x onerror=alert(1)>');"
+    },
+    {
+      "rule_id": "new-xss-047",
+      "description": "Test XSS bypass using homograph characters",
+      "input": "<scrіpt>alert(1)</scrіpt>"
+    },
+    {
+      "rule_id": "new-xss-048",
+      "description": "Test XSS payload using Unicode encoding variant",
+      "input": "\u003Cscript\u003Ealert(1)\u003C/script\u003E"
+    }
+  ]
+}
