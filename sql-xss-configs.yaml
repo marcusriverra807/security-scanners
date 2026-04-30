@@ -10,7 +10,7 @@ rules:
   - id: xss-002
     description: "Detect JavaScript URLs"
     pattern: "javascript:.*?"
-    severity: "high"
+    severity: "medium"
   - id: xss-003
     description: "Detect onerror handler injection"
     pattern: "onerror=\".*?\""
@@ -30,4 +30,8 @@ rules:
   - id: xss-007
     description: "Detect image onerror injection"
     pattern: "<img.*?onerror=.*?"
+    severity: "high"
+  - id: xss-008
+    description: "Detect eval() function usage"
+    pattern: "eval\s*\(.*?\)"
     severity: "high"
