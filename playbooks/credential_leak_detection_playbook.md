@@ -136,14 +136,12 @@ Common detection rules and patterns include:
 - Educate developers and staff on secure credential management practices.
 - Conduct security awareness training focused on credential handling.
 - Use communication and incident reporting templates to notify stakeholders.
-- TODO(rahul): Develop communication templates and training materials.
 
 ### 5. Recovery
 - Monitor for any further credential leak alerts and reused or rotated secrets using automated monitoring.
 - Conduct a post-incident review and update detection rules and response plans as needed.
 - Implement feedback loops to improve detection based on incident learnings.
 - Schedule regular training and awareness campaigns for developers and staff.
-- TODO(rahul): Create post-incident review templates and feedback mechanisms.
 
 ## Playbook Automation Enhancements
 - Integrated new automation tools and APIs for enhanced credential leak detection and response.
@@ -181,6 +179,34 @@ Common detection rules and patterns include:
 - Prompt response is critical to minimize risk from leaked credentials.
 - Ensure analysts have access to updated detection rules and automation playbooks.
 - Maintain clear communication channels for incident escalation.
+
+## Proposed Updates
+
+### Communication Templates
+- Develop and include structured communication templates for alert notifications, escalation emails, and incident status updates.
+- Templates should cover initial alert, follow-up communications, containment confirmation, and post-incident reporting.
+- Provide guidance on key information to include and tone for clarity and professionalism.
+
+### Training Materials
+- Create comprehensive training modules on credential leak detection, investigation techniques, and response workflows.
+- Include hands-on exercises using regex detection rules and integrated automation tools.
+- Provide case studies and lessons learned from recent incidents.
+- Offer training paths for beginner to advanced analysts.
+
+### Post-Incident Review Templates
+- Establish structured templates for documenting incident summaries, root cause analysis, response effectiveness, and improvement actions.
+- Include checklists for updating detection rules, automation workflows, and playbook revisions based on review findings.
+
+### Playbook Content Enhancements
+- Expand the Common False Positives section with examples and mitigation strategies.
+- Update the Playbook Automation Enhancements section with latest tools and integration updates.
+- Link to the newly created communication templates and training materials.
+- Define a periodic review schedule to maintain playbook relevance and accuracy.
+
+### Ownership and Review Process
+- Assign section owners for accountability and regular updates.
+- Define a quarterly review cadence.
+- Establish feedback mechanisms for continuous improvement from analysts and stakeholders.
 
 ---
 
