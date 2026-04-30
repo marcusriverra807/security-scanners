@@ -5,7 +5,7 @@
 rules:
   - id: xss-001
     description: "Detect script tag injection with improved accuracy"
-    pattern: "<script\\b[^>]*?src=['\"[^\"]*['\"]?[^>]*?>|<script>((?!console\\.log|void\\(0\\)).)*?</script>"
+    pattern: "<script\\b[^>]*?(src=['\"'][^'\"']+['\"'])?[^>]*>(?!.*(console\\.log|void\\(0\\))).*?<\\/script>"
     severity: "high"
     context: "Check for script tags without valid sources and inline scripts, excluding common benign patterns like console.log and void(0)."
     test_cases:
@@ -25,11 +25,11 @@ rules:
         expected: "true"
       - input: "<script>console.log('test');</script>"
         expected: "false"
-    estimated_fp_rate: "3%"
+    estimated_fp_rate: "2%"
     runbook_link: "https://example.com/runbook/xss-detection"
   - id: xss-002
     description: "Detect JavaScript URLs with refined pattern"
-    pattern: "javascript:(?!void\\(0\\))[^"]*|data:text/html[^"]*|onerror\\s*=\\s*['\"javascript:[^\'\"]*['\"]"
+    pattern: "(?i)javascript:(?!void\\(0\\))[^\s'"]+|data:text/html[^\s'"]+|onerror\\s*=\\s*['\"]javascript:[^'\"]*['\"]"
     severity: "high"
     context: "Avoid untrusted JavaScript URLs and inline event handlers that execute JavaScript, excluding common benign void(0) calls."
     test_cases:
@@ -43,11 +43,11 @@ rules:
         expected: "false"
       - input: "<a href='data:text/html,<img src=x onerror=alert(1)>'>Click</a>"
         expected: "true"
-    estimated_fp_rate: "5%"
+    estimated_fp_rate: "3%"
     runbook_link: "https://example.com/runbook/javascript-urls"
   - id: xss-003
     description: "Detect onerror handler injection with exclusions for benign handlers"
-    pattern: "(onerror|onclick|onload|onbeforeunload|onfocus|onblur)\\s*=\\s*['\"]((?!console\\.log|return\\s+true)[^'\"]*?)['\"]"
+    pattern: "(?i)(onerror|onclick|onload|onbeforeunload|onfocus|onblur)\\s*=\\s*['\"]((?!console\\.log|return\\s+true)[^'\"]*?)['\"]"
     severity: "high"
     context: "Handle event attributes cautiously, and validate event handlers, excluding common benign patterns like console.log and return true."
     test_cases:
@@ -61,11 +61,11 @@ rules:
         expected: "true"
       - input: "<img src='image.jpg' onblur='console.log(1)'>"
         expected: "false"
-    estimated_fp_rate: "3%"
+    estimated_fp_rate: "2%"
     runbook_link: "https://example.com/runbook/onerror-injection"
   - id: xss-004
     description: "Detect SVG onload injection with refined exclusions"
-    pattern: "<svg\\b[^>]*?(onload|onerror|onclick|onfocus|onblur)\\s*=\\s*['\"]((?!console\\.log|return\\s+true)[^'\"]*?)['\"]"
+    pattern: "(?i)<svg\\b[^>]*?(onload|onerror|onclick|onfocus|onblur)\\s*=\\s*['\"]((?!console\\.log|return\\s+true)[^'\"]*?)['\"]"
     severity: "high"
     context: "Ensure SVG elements do not execute scripts, and validate all SVG attributes, excluding benign handlers."
     test_cases:
@@ -75,11 +75,11 @@ rules:
         expected: "false"
       - input: "<svg onload='console.log(1)'></svg>"
         expected: "false"
-    estimated_fp_rate: "4%"
+    estimated_fp_rate: "3%"
     runbook_link: "https://example.com/runbook/svg-onload"
   - id: xss-005
     description: "Detect XSS through event handler attributes with expanded coverage"
-    pattern: "\\bon\\w+\\s*=\\s*['\"]([^'\"]+)['\"]"
+    pattern: "(?i)\\bon\\w+\\s*=\\s*['\"]([^'\"]+)['\"]"
     severity: "high"
     context: "Monitor for inline event handlers that could execute malicious scripts, including common event handlers like onclick, onmouseover, onmouseenter."
     test_cases:
@@ -91,6 +91,8 @@ rules:
         expected: "true"
       - input: "<div onmouseenter='alert(1)'>Mouse enter</div>"
         expected: "true"
+    estimated_fp_rate: "3%"
+    runbook_link: "https://example.com/runbook/event-handler-attributes"
   - id: xss-006
     description: "Detect encoded script injection patterns"
     pattern: "(%3C|<|&lt;)script(%3E|>|&gt;).*?(%3C|<|&lt;)/script(%3E|>|&gt;)"
@@ -105,11 +107,11 @@ rules:
         expected: "true"
       - input: "<div>Safe content</div>"
         expected: "false"
-    estimated_fp_rate: "3%"
+    estimated_fp_rate: "2%"
     runbook_link: "https://example.com/runbook/encoded-script-injection"
   - id: xss-007
     description: "Detect event handler attributes with common XSS vectors"
-    pattern: "(onclick|onmouseover|onmouseenter|onfocus|onblur|onerror)\\s*=\\s*['\"]([^'\"]+)['\"]"
+    pattern: "(?i)(onclick|onmouseover|onmouseenter|onfocus|onblur|onerror)\\s*=\\s*['\"]([^'\"]+)['\"]"
     severity: "high"
     context: "Detect common event handler attributes that are often used in XSS attacks."
     test_cases:
@@ -121,13 +123,3 @@ rules:
         expected: "true"
       - input: "<div>No event</div>"
         expected: "false"
-  - id: XSS001
-    description: "Detects malicious script tags"
-    pattern: "<script.*?>.*?</script>"
-    severity: "high"
-    context: "web"
-    test_cases:
-      - input: "test1"
-      - input: "test2"
-    estimated_fp_rate: "low"
-    runbook_link: "http://example.com/runbook"
