@@ -1,6 +1,6 @@
 # SQL XSS Detection Configuration
 
-# Enhanced detection rules for Cross-Site Scripting (XSS)
+# Enhanced detection rules for Cross-Site Scripting (XSS) and SQL Injection
 
 rules:
   - id: xss-001
@@ -91,7 +91,7 @@ rules:
     severity: "high"
   - id: new-sql-002
     description: "Detect SQL injection via comment-based obfuscation"
-    pattern: "(--|#|\/\\*.*?\\*\/)(?=.*?(select|union|insert|update|delete|drop))"
+    pattern: "(--|#|\/\\*.*?\\*)(?=.*?(select|union|insert|update|delete|drop))"
     severity: "high"
   - id: new-sql-003
     description: "Detect SQL injection using hexadecimal encoding"
