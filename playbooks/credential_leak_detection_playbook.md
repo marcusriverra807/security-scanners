@@ -6,6 +6,32 @@ This playbook provides a structured response plan for alerts triggered by creden
 ## Alert Pattern
 The alert patterns are based on detection rules targeting common credential leak vectors such as exposed API keys, passwords, tokens, and other sensitive information in source code, logs, or network traffic.
 
+Common detection rules and patterns include:
+
+1. **Detect AWS Access Keys**
+   - Regex: `AKIA[0-9A-Z]{16}`
+   - Description: Detect AWS Access Key IDs typically used in AWS services.
+
+2. **Detect AWS Secret Access Keys**
+   - Regex: `(?i)aws(.{0,20})?(secret|access)?(.{0,20})?["']?[0-9a-zA-Z/+]{40}["']?`
+   - Description: Detect AWS Secret Access Keys often paired with Access Key IDs.
+
+3. **Detect Generic API Keys**
+   - Regex: `(?i)(api_key|apikey|api-key|token|auth_token|access_token)["'=:\s]+[0-9a-zA-Z]{16,40}`
+   - Description: Detect common API key patterns used in various services.
+
+4. **Detect Private RSA Keys**
+   - Regex: `-----BEGIN PRIVATE KEY-----[\s\S]+?-----END PRIVATE KEY-----`
+   - Description: Detect private RSA keys which should never be exposed in code or logs.
+
+5. **Detect Basic Auth Credentials in URLs**
+   - Regex: `https?:\/\/[^\/\s]+:[^\/\s]+@[^\/\s]+`
+   - Description: Detect URLs containing embedded basic auth credentials.
+
+6. **Detect Password Assignments**
+   - Regex: `(?i)(password|passwd|pwd)["'=:\s]+.{6,}`
+   - Description: Detect common password variable assignments in code or config files.
+
 ## Response Steps
 
 ### 1. Alert Triage
@@ -33,7 +59,6 @@ The alert patterns are based on detection rules targeting common credential leak
 - Conduct a post-incident review and update detection rules and response plans as needed.
 
 ## References
-- Credential leak detection rules and patterns (to be added).
 - [Best practices for secret management](https://example.com/secret-management-best-practices)
 
 ## Notes
