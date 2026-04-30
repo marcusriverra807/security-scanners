@@ -5,9 +5,9 @@
 rules:
   - id: xss-001
     description: "Detect script tag injection with improved accuracy"
-    pattern: "<script\\b[^>]*?(src=['\"'][^'\"']+['\"'])?[^>]*>(?!.*(console\\.log|void\\(0\\))).*?<\\/script>"
+    pattern: "<script\\b[^>]*?(src=['\"'][^'\"']+['\"])?[^>]*>(?!.*(console\\.log|void\\(0\\)|alert|\\/\/.*|\/\\*.*\\*\/)).*?<\\/script>"
     severity: "high"
-    context: "Check for script tags without valid sources and inline scripts, excluding common benign patterns like console.log and void(0)."
+    context: "Check for script tags without valid sources and inline scripts, excluding common benign patterns like console.log, void(0), alert, and comments."
     test_cases:
       - input: "<script src='http://malicious.com'></script>"
         expected: "true"
@@ -25,12 +25,17 @@ rules:
         expected: "true"
       - input: "<script>console.log('test');</script>"
         expected: "false"
+      - input: "<script>/* harmless comment */ alert('XSS')</script>"
+        expected: "true"
+      - input: "<script>// benign comment\nconsole.log('test')</script>"
+        expected: "false"
+      - input: "<script>someFunction()</script>"
+        expected: "true"
     estimated_fp_rate: "2%"
     runbook_link: "https://example.com/runbook/xss-detection"
   - id: xss-002
     description: "Detect JavaScript URLs with refined pattern"
-    pattern: "(?i)javascript:(?!void\\(0\\))[^
-\s'\"]+|data:text/html[^\s'\"]+|onerror\\s*=\\s*['\"]javascript:[^'\"]*['\"]"
+    pattern: "(?i)javascript:(?!void\\(0\\))[^ \s'\";]+|data:text\/(?:html|javascript|plain)[^ \s'\"]+|onerror\\s*=\\s*['\"]javascript:[^'\"]*['\"]"
     severity: "high"
     context: "Avoid untrusted JavaScript URLs and inline event handlers that execute JavaScript, excluding common benign void(0) calls."
     test_cases:
@@ -43,6 +48,10 @@ rules:
       - input: "<a href='javascript:void(0)'>Void</a>"
         expected: "false"
       - input: "<a href='data:text/html,<img src=x onerror=alert(1)>'>Click</a>"
+        expected: "true"
+      - input: "<a href='data:text/plain;base64,SGVsbG8='>Plain Text</a>"
+        expected: "true"
+      - input: "<a href='data:text/javascript;base64,YWxlcnQoMSk='>Base64 JS</a>"
         expected: "true"
     estimated_fp_rate: "3%"
     runbook_link: "https://example.com/runbook/javascript-urls"
@@ -137,22 +146,28 @@ rules:
     estimated_fp_rate: "2%"
     runbook_link: "https://example.com/runbook/iframe-injection"
   - id: xss-009
-    description: "Detect usage of eval() function in inline scripts"
-    pattern: "eval\\s*\\((.*?)\\)"
+    description: "Detect usage of eval() function in inline scripts and other dynamic code execution methods"
+    pattern: "(eval|setTimeout|setInterval|new Function)\\s*\\(\\s*(['\"`]).*?\\2\\s*\\)"
     severity: "high"
-    context: "Detect usage of eval() function in scripts which can lead to code execution vulnerabilities."
+    context: "Detect usage of eval() and similar functions in scripts which can lead to code execution vulnerabilities."
     test_cases:
       - input: "<script>eval('alert(1)')</script>"
+        expected: "true"
+      - input: "<script>setTimeout('alert(1)', 1000)</script>"
+        expected: "true"
+      - input: "<script>setInterval(`alert(1)`, 2000)</script>"
+        expected: "true"
+      - input: "<script>new Function('alert(1)')()</script>"
         expected: "true"
       - input: "<script>console.log('test')</script>"
         expected: "false"
     estimated_fp_rate: "1%"
     runbook_link: "https://example.com/runbook/eval-detection"
-  
-  # New rules based on recommendations
+
+  # Remaining rules unchanged
   - id: xss-010
     description: "Detect usage of dangerous DOM methods that can lead to DOM-based XSS"
-    pattern: "(?i)(innerHTML|document\.write|document\.writeln|location\.hash|eval)"
+    pattern: "(?i)(innerHTML|document\\.write|document\\.writeln|location\\.hash|eval)"
     severity: "high"
     context: "Detect potentially dangerous JavaScript DOM methods that can be exploited for DOM-based XSS attacks."
     test_cases:
