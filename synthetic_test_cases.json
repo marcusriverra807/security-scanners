@@ -1,0 +1,49 @@
+{
+  "test_cases": [
+    {
+      "rule_id": "new-xss-001",
+      "description": "Test URL encoding attacks",
+      "input": "%3Cscript%3Ealert(1)%3C/script%3E"
+    },
+    {
+      "rule_id": "new-xss-002",
+      "description": "Test DOM-based XSS",
+      "input": "document.write('<img src=x onerror=alert(1)>')"
+    },
+    {
+      "rule_id": "new-xss-003",
+      "description": "Test deprecated HTML attributes",
+      "input": "<script onclick='alert(1)'>"
+    },
+    {
+      "rule_id": "new-xss-004",
+      "description": "Test script tag with attributes",
+      "input": "<script src='malicious.js' onerror='alert(1)'></script>"
+    },
+    {
+      "rule_id": "new-xss-005",
+      "description": "Test dynamic script execution",
+      "input": "eval('alert(1)'); setTimeout('alert(1)',1000);"
+    },
+    {
+      "rule_id": "new-xss-006",
+      "description": "Test inline event handlers",
+      "input": "<div onclick='alert(1)'>Click me</div>"
+    },
+    {
+      "rule_id": "new-sql-001",
+      "description": "Test time-based SQL injection",
+      "input": "SELECT * FROM users WHERE id=1; WAITFOR DELAY '00:00:10'"
+    },
+    {
+      "rule_id": "sensitive-001",
+      "description": "Test hardcoded API keys",
+      "input": "API_KEY='1234567890abcdef1234567890abcdef'"
+    },
+    {
+      "rule_id": "sensitive-002",
+      "description": "Test hardcoded secrets",
+      "input": "password='mypassword123'"
+    }
+  ]
+}
