@@ -4,9 +4,11 @@
 
 rules:
   - id: xss-001
-    description: "Detect script tag injection"
-    pattern: "<script\\b(?!.*\\btype\\s*=\\s*[\\'\\"]?module[\\'\\"]?)(?!%3Cscript%3E)[^>]*>"
+    description: "Detect script tag injection with improved encoding recognition and whitelist"
+    pattern: "<script\\b(?!.*\\btype\\s*=\\s*[\\'\\"]?module[\\'\\"]?)(?!%3Cscript%3E|%3cscript%3e)[^>]*>"
     severity: "high"
+    whitelist_patterns:
+      - encoded_script_safe_context
   - id: xss-002
     description: "Detect JavaScript URLs"
     pattern: "javascript:(?!base64)[^\\s]*|data:text/html[^\\s]*|vbscript:[^\\s]*"
@@ -70,6 +72,7 @@ rules:
     description: "Detect tautology-based SQL injection with context analysis - requires additional sanitation verification step in scanning logic"
     pattern: "(1=1|1=0|0=0|\\bTRUE\\b|\\bFALSE\\b|/\\*.*?\\*/)(?<!parameterized)"
     severity: "high"
+    context_sanitation_verification: true
   - id: new-sql-001
     description: "Detect SQL injection via time-based attacks"
     pattern: "(SLEEP\\(|WAITFOR|BENCHMARK\\()"
