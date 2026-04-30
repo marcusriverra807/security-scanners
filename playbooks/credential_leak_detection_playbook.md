@@ -67,6 +67,18 @@ Common detection rules and patterns include:
 15. **Entropy-Based Detection**
     - Description: Detect high entropy strings that may indicate secrets using entropy analysis techniques.
 
+16. **Detect Slack Tokens**
+    - Regex: `xox[baprs]-[0-9a-zA-Z]{10,48}`
+    - Description: Detect Slack API tokens.
+
+17. **Detect Stripe API Keys**
+    - Regex: `(?i)sk_live_[0-9a-zA-Z]{24}`
+    - Description: Detect Stripe live secret API keys.
+
+18. **Detect GitHub Personal Access Tokens**
+    - Regex: `gh[pousr]_[0-9a-zA-Z]{36}`
+    - Description: Detect GitHub personal access tokens.
+
 ## Response Steps
 
 ### 1. Alert Triage
@@ -75,6 +87,7 @@ Common detection rules and patterns include:
 - Enrich alerts with threat intelligence feeds and public code repository scans.
 - Prioritize alerts using risk scoring based on asset criticality and exposure.
 - Review leaked credential data or incident details that triggered the alert.
+- TODO(rahul): Add checklist for alert validation and escalation criteria.
 
 ### 2. Investigation
 - Analyze the source of the alert (e.g., source code repository, network logs, application logs).
@@ -84,12 +97,14 @@ Common detection rules and patterns include:
 - Utilize user behavior analytics to identify insider threats.
 - Consult known credential patterns and detection rule test cases for reference.
 - Use automated investigation tools and queries where applicable.
+- TODO(rahul): Define specific queries and tools used for investigation.
 
 ### 3. Containment
 - Immediately revoke or rotate exposed credentials using automation through cloud and secret management APIs.
 - Block access or isolate affected systems to prevent further leakage.
 - Apply temporary filters or rules to prevent automated exploitation.
 - Recommend network segmentation to isolate compromised systems.
+- TODO(rahul): Specify automation tools and playbooks integrated for containment.
 
 ### 4. Remediation
 - Remove exposed credentials from source code or logs.
@@ -99,12 +114,14 @@ Common detection rules and patterns include:
 - Educate developers and staff on secure credential management practices.
 - Conduct security awareness training focused on credential handling.
 - Use communication and incident reporting templates to notify stakeholders.
+- TODO(rahul): Develop communication templates and training materials.
 
 ### 5. Recovery
 - Monitor for any further credential leak alerts and reused or rotated secrets using automated monitoring.
 - Conduct a post-incident review and update detection rules and response plans as needed.
 - Implement feedback loops to improve detection based on incident learnings.
 - Schedule regular training and awareness campaigns for developers and staff.
+- TODO(rahul): Create post-incident review templates and feedback mechanisms.
 
 ## Playbook Automation
 - Integrate playbook steps with SOAR platforms for automated investigation and response.
