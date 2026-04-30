@@ -25,7 +25,7 @@ rule new_xss_002_dom_based_xss {
         last_updated = "2024-06-10"
     strings:
         $dangerous_dom_methods = /document\.write|innerHTML|eval|setTimeout\(\s*['\"]|setInterval\(\s*['\"]|insertAdjacentHTML/  
-        $inline_event_handlers = /on\w+=\"[^\"]*\"|on\w+='[^']*'/
+        $inline_event_handlers = /on\w+="[^"]*"|on\w+='[^']*'/
         $custom_event_handlers = /onmousewheel|onmouseenter|onmouseleave|onpointerdown|onpointerup|ontouchstart|ontouchend|onpointercancel|onpointermove|onpointerover|onpointerout|onwheel|onfocus|onblur|oninput|onchange|onselect|ondragstart|ondrop/  // Added drag events
         $shadow_dom_manipulation = /attachShadow\(|shadowRoot\./
         $custom_elements = /customElements\.define\(/ 
