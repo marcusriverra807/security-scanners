@@ -124,10 +124,14 @@ Common detection rules and patterns include:
 - TODO(rahul): Create post-incident review templates and feedback mechanisms.
 
 ## Playbook Automation
-- Integrate playbook steps with SOAR platforms for automated investigation and response.
-- Leverage orchestration to revoke credentials, update firewall rules, and notify teams.
-- Support notification channels such as Slack, email, and ticketing systems.
-- Automate multi-step workflows including alert triage, investigation, containment, and remediation.
+- Integrate playbook steps with SOAR platforms such as Palo Alto Cortex XSOAR, Splunk Phantom, and Demisto for automated investigation and response.
+- Utilize secret scanning tools like GitHub Advanced Security, TruffleHog, and Detect Secrets for automated detection in code repositories.
+- Leverage cloud provider APIs including AWS Secrets Manager, Azure Key Vault, and Google Cloud Secret Manager with serverless functions to automate secret rotation and revocation.
+- Incorporate CI/CD pipeline integrations using GitHub Actions, GitLab CI, and Jenkins to block commits containing exposed secrets and enforce secure coding practices.
+- Support notification and incident management integrations with Slack, Microsoft Teams, PagerDuty, Opsgenie, Jira, and ServiceNow for real-time alerting and incident tracking.
+- Integrate threat intelligence feeds and User and Entity Behavior Analytics (UEBA) tools for enriched alert context and insider threat detection.
+- Automate remediation workflows with Infrastructure as Code (IaC) scanning tools like Checkov and Terraform Sentinel to prevent secret leaks and update firewall/access control policies dynamically.
+- Automate multi-step workflows including alert triage, investigation, containment, remediation, and recovery to improve response speed and consistency.
 
 ## Common False Positives
 - Generic strings that match API key patterns but are not actual keys.
