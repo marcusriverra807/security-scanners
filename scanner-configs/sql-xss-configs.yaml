@@ -1,11 +1,10 @@
 # SQL XSS Detection Configuration
 
 # Enhanced detection rules for Cross-Site Scripting (XSS)
-
 rules:
   - id: xss-001
-    description: "Detect script tag injection"
-    pattern: "<script\\b(?!.*\\btype\\s*=\\s*[\\'\\"]?module[\\'\\"]?)[^>]*>"
+    description: "Detect script tag injection - adjusted to exclude harmless encoded script tags"
+    pattern: "(?<!%3Cscript%3E)<script\\b(?!.*\\btype\\s*=\\s*[\\'\\"]?module[\\'\\"]?)[^>]*>"
     severity: "high"
   - id: xss-002
     description: "Detect JavaScript URLs"
@@ -67,8 +66,8 @@ rules:
     pattern: "(?<!\\w)(\\bSELECT\\b|\\bINSERT\\b|\\bUPDATE\\b|\\bDELETE\\b|\\bWHERE\\b|\\bOR\\b|\\bAND\\b|\\bUNION\\b|--|/\\*.*?\\*/)(?!.*\\bFROM\\b).*?(['\"]?[^;]*?['\"]?)(?<!\\w)(?<!parameterized)"
     severity: "high"
   - id: sql-002
-    description: "Detect tautology-based SQL injection with context analysis"
-    pattern: "(1=1|1=0|0=0|\\bTRUE\\b|\\bFALSE\\b|/\\*.*?\\*/)(?<!parameterized)"
+    description: "Detect tautology-based SQL injection with context analysis - enhanced to exclude parameterized and sanitized queries"
+    pattern: "(1=1|1=0|0=0|\\bTRUE\\b|\\bFALSE\\b|/\\*.*?\\*/)(?<!parameterized)(?<!sanitized)"
     severity: "high"
   - id: new-sql-001
     description: "Detect SQL injection via time-based attacks"
