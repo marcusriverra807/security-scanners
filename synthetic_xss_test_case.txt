@@ -1,0 +1,32 @@
+<!-- Synthetic test case for new YARA-style XSS detection rules -->
+
+<!-- Test URL encoding attacks -->
+<script>var a = "%3Cscript%3Ealert('XSS')%3C/script%3E";</script>
+
+<!-- Test DOM-based XSS -->
+<script>document.write('<img src=x onerror=alert(1)>');</script>
+
+<!-- Test obfuscated script tags -->
+<script type="text/base64">PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==</script>
+<script type="text/hex">3C7363726970743E616C6572742831293C2F7363726970743E</script>
+
+<!-- Test script tag with malicious attributes -->
+<script src="javascript:alert('XSS')"></script>
+
+<!-- Test dynamic script execution -->
+<script>eval('alert(1)');</script>
+
+<!-- Test inline event handlers -->
+<div onclick="alert('XSS')">Click me</div>
+
+<!-- Test SVG element attribute injection -->
+<svg onload="alert('XSS')"></svg>
+
+<!-- Test HTML entity encoded script injection -->
+<div>&lt;script&gt;alert('XSS')&lt;/script&gt;</div>
+
+<!-- Test iframe injection attempts -->
+<iframe src="javascript:alert('XSS')"></iframe>
+
+<!-- Test dangerous DOM methods -->
+<script>element.innerHTML = '<img src=x onerror=alert(1)>';</script>
