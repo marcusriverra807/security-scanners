@@ -63,7 +63,7 @@
     {
       "rule_id": "new-xss-010",
       "description": "Test dangerous DOM method innerHTML",
-      "input": "element.innerHTML = '<img src=x onerror=alert(1)>';"
+      "input": "element.innerHTML = '<img src=x onerror=alert(1)>';}"
     },
     {
       "rule_id": "new-xss-011",
@@ -84,6 +84,46 @@
       "rule_id": "new-xss-014",
       "description": "Test reflected XSS pattern in HTTP request",
       "input": "GET /search?q=<script>alert(1)</script> HTTP/1.1"
+    },
+    {
+      "rule_id": "new-xss-015",
+      "description": "Test XSS via new HTML5 elements and attributes",
+      "input": "<details open ontoggle='alert(1)'>Details content</details>"
+    },
+    {
+      "rule_id": "new-xss-016",
+      "description": "Test XSS using postMessage API",
+      "input": "window.postMessage('<img src=x onerror=alert(1)>', '*');"
+    },
+    {
+      "rule_id": "new-xss-017",
+      "description": "Test XSS using WebSocket API",
+      "input": "new WebSocket('ws://attacker.com').onmessage = function() { alert(1); };"
+    },
+    {
+      "rule_id": "new-xss-018",
+      "description": "Test polyglot XSS payloads bypassing filters",
+      "input": "'\"><svg/onload=alert(1)>"
+    },
+    {
+      "rule_id": "new-xss-019",
+      "description": "Test mutation-based DOM XSS modifying elements post-load",
+      "input": "var el = document.createElement('div'); el.innerHTML = '<img src=x onerror=alert(1)>'; document.body.appendChild(el);"
+    },
+    {
+      "rule_id": "new-xss-020",
+      "description": "Test XSS via onload event on body tag",
+      "input": "<body onload='alert(1)'>"
+    },
+    {
+      "rule_id": "new-xss-021",
+      "description": "Test XSS via onerror event on image",
+      "input": "<img src='invalid.png' onerror='alert(1)'>"
+    },
+    {
+      "rule_id": "new-xss-022",
+      "description": "Test XSS embedded in JSON strings",
+      "input": "{\"username\":\"<script>alert(1)</script>\"}"
     }
   ]
 }
