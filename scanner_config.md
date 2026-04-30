@@ -18,11 +18,23 @@
    - **Dynamic Scanning Techniques**: Implement real-time scanning techniques to identify dynamic payloads during execution.
    - **Contextual Analysis**: Analyze the context in which potential XSS payloads are used to reduce false positives and improve detection accuracy.
 
+### Role-Based Access Control (RBAC) Checks
+- Add scanning for RBAC policies, role definitions, and permissions in critical systems and applications.
+- Verify enforcement of RBAC controls and flag any deviations or violations.
+- Collect evidence from periodic access reviews and include in compliance reports.
+- Generate alerts for unauthorized access or policy violations related to RBAC.
+
+### Monitoring System Checks
+- Integrate collection of logs and alerts from monitoring tools detecting unauthorized access attempts.
+- Assess coverage and operational status of monitoring systems.
+- Alert on monitoring system failures or anomalies affecting compliance.
+- Include monitoring effectiveness reports in compliance dashboards.
+
 ### Tuning Existing Rules
 - **Increase Sensitivity on Authentication Flows**: Adjust thresholds for detecting vulnerabilities in authentication and session management to reduce false negatives.
 - **Review File Upload Mechanisms**: Enhance rules for file upload handling to prevent malicious file uploads.
 
 ### Reporting
 - Set up alerts for detected vulnerabilities and integrate with CI/CD pipeline for automated feedback.
-- Implement dashboard visualization for real-time monitoring of vulnerability trends and remediation status.
+- Implement dashboard visualization for real-time monitoring of vulnerability trends, RBAC compliance status, and monitoring system effectiveness.
 - Schedule regular review meetings to evaluate detection effectiveness and update rules accordingly.
