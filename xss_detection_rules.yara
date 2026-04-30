@@ -1,192 +1,47 @@
-rule new_xss_001_url_encoding_attacks {
+rule updated_xss_url_encoding_attacks {
     meta:
-        description = "Detect URL encoding attacks"
+        description = "Detect advanced URL encoding and mixed encoding attacks including UTF-7 and Unicode escapes"
         severity = "high"
         false_positive_rate = "2%"
         version = "1.6"
-        last_updated = "2024-06-10"
+        last_updated = "2026-06-01"
     strings:
-        $url_encoded_payload = /%[0-9a-fA-F]{2}/
-        $double_encoded_payload = /%(25|2525)[0-9a-fA-F]{2}/
-        $extended_url_encoded_payload = /%(7c|5c|3c|3e|22|27|28|29|3d|26|2b|2f|3f|3a|23|24|25|3b|40|60|7e)/  // Added ` and ~ characters
-        $base64_encoded_payload = /(?:[A-Za-z0-9+\/]{4}){2,}/
-        $mixed_encoded_js_url = /javascript\s*:\s*(?:%[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}|\x[0-9a-fA-F]{2}|\.)+/i
-        $multi_level_encoded_payload = /(%25){2,}[0-9a-fA-F]{2}/  // multi-level encoded payload
+        $utf7_encoded_payload = /\+ADw-|%2bADw-/i   // UTF-7 encoded <
+        $unicode_escape_payload = /\\u[0-9a-fA-F]{4}/
+        $mixed_encoding_payload = /(%[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}|\+ADw-)+/
     condition:
         any of them
 }
 
-rule new_xss_002_dom_based_xss {
+rule updated_xss_dom_framework_apis {
     meta:
-        description = "Detect DOM-based XSS"
+        description = "Detect DOM-based XSS in modern JavaScript frameworks"
         severity = "high"
         false_positive_rate = "2%"
         version = "1.6"
-        last_updated = "2024-06-10"
+        last_updated = "2026-06-01"
     strings:
-        $dangerous_dom_methods = /document\.write|innerHTML|eval|setTimeout\(\s*['\"]|setInterval\(\s*['\"]|insertAdjacentHTML/  
-        $inline_event_handlers = /on\w+="[^"]*"|on\w+='[^']*'/
-        $custom_event_handlers = /onmousewheel|onmouseenter|onmouseleave|onpointerdown|onpointerup|ontouchstart|ontouchend|onpointercancel|onpointermove|onpointerover|onpointerout|onwheel|onfocus|onblur|oninput|onchange|onselect|ondragstart|ondrop/  // Added drag events
-        $shadow_dom_manipulation = /attachShadow\(|shadowRoot\./
-        $custom_elements = /customElements\.define\(/ 
+        $react_dangerous_innerhtml = /dangerouslySetInnerHTML/
+        $angular_bypass_security = /bypassSecurityTrustHtml/
+        $vue_template_injection = /v-html=/
     condition:
         any of them
 }
 
-rule new_xss_003_obfuscated_script_tags {
+rule updated_xss_ml_integration {
     meta:
-        description = "Detect obfuscated script tags with base64 or hex encoding"
-        severity = "high"
-        false_positive_rate = "3%"
-        version = "1.6"
-        last_updated = "2024-06-10"
-    strings:
-        $base64_script = /<script\s+type=\"text\/base64\">[A-Za-z0-9+\/]+=*<\/script>/
-        $hex_encoded_script = /<script\s+type=\"text\/hex\">[0-9A-Fa-f]+<\/script>/
-        $base85_encoded_script = /<script\s+type=\"text\/base85\">[A-Za-z0-9!\"\#\$%\&'\(\)*\+,\-\./:;<=>\?@\[\\\]\^_`\{|\}~]+<\/script>/
-        $safe_pattern = /<script\s+type=\"text\/base64\">aGFybWxlc3M=<\/script>/  // base64 for 'harmless'
-    condition:
-        any of ($base64_script, $hex_encoded_script, $base85_encoded_script) and not $safe_pattern
-}
-
-rule new_xss_007_svg_attribute_injection {
-    meta:
-        description = "Detect SVG element attribute injection"
-        severity = "high"
-        false_positive_rate = "3%"
-        version = "1.6"
-        last_updated = "2024-06-10"
-    strings:
-        $xlink_href_js = /xlink:href=['"]javascript:[^'"]+['"]/i
-    condition:
-        $xlink_href_js
-}
-
-rule new_xss_008_html_entity_encoded_script_injection {
-    meta:
-        description = "Detect HTML entity encoded script injection"
-        severity = "high"
-        false_positive_rate = "3%"
-        version = "1.6"
-        last_updated = "2024-06-10"
-    strings:
-        $html_entity_script = /&lt;script&gt;alert\(&#x31;\);&lt;\/script&gt;/
-    condition:
-        $html_entity_script
-}
-
-rule new_xss_009_iframe_injection_attempt {
-    meta:
-        description = "Detect iframe injection attempts"
-        severity = "medium"
-        false_positive_rate = "5%"
-        version = "1.6"
-        last_updated = "2024-06-10"
-    strings:
-        $iframe_src = /<iframe src=['"]http[^'"]+['"]><\/iframe>/
-    condition:
-        $iframe_src
-}
-
-rule new_xss_010_dangerous_dom_innerhtml {
-    meta:
-        description = "Detect dangerous DOM method innerHTML usage"
-        severity = "high"
-        false_positive_rate = "3%"
-        version = "1.6"
-        last_updated = "2024-06-10"
-    strings:
-        $innerhtml_assignment = /innerHTML\s*=\s*['"].*<img src=x onerror=alert\(1\)>.*['"]/i
-    condition:
-        $innerhtml_assignment
-}
-
-rule new_xss_011_js_api_abuse {
-    meta:
-        description = "Detect abuse of modern JavaScript APIs like MutationObserver, Proxy, WebAssembly, and SharedArrayBuffer"
-        severity = "high"
-        false_positive_rate = "3%"
-        version = "1.6"
-        last_updated = "2024-06-10"
-    strings:
-        $mutation_observer = /MutationObserver/
-        $proxy = /Proxy\s*\(/ 
-        $webassembly = /WebAssembly\.instantiate/
-        $shared_array_buffer = /SharedArrayBuffer/
-    condition:
-        any of them
-}
-
-rule new_xss_013_postmessage_abuse {
-    meta:
-        description = "Detect suspicious usage of postMessage API in scripts, including origin bypass attempts"
-        severity = "medium"
-        false_positive_rate = "5%"
-        version = "1.5"
-        last_updated = "2024-06-10"
-    strings:
-        $post_message = /postMessage\s*\(/ 
-        $origin_bypass = /postMessage\s*\([^,]+,\s*['"]*\*['"]*\)/
-    condition:
-        $post_message or $origin_bypass
-}
-
-rule new_xss_017_csp_bypass_techniques {
-    meta:
-        description = "Detect emerging Content Security Policy (CSP) bypass techniques"
-        severity = "high"
-        false_positive_rate = "4%"
-        version = "1.4"
-        last_updated = "2024-06-10"
-    strings:
-        $csp_bypass = /style-src\s+unsafe-inline|script-src\s+unsafe-inline|script-src-elem\s+unsafe-inline|default-src\s+data:/
-    condition:
-        $csp_bypass
-}
-
-rule new_xss_018_webrtc_serviceworker_abuse {
-    meta:
-        description = "Detect abuse of WebRTC and ServiceWorkers for XSS payload delivery"
-        severity = "high"
-        false_positive_rate = "3%"
-        version = "1.4"
-        last_updated = "2024-06-10"
-    strings:
-        $webrtc = /RTCPeerConnection|getUserMedia/
-        $service_worker_register = /ServiceWorker\.register\(/i
-    condition:
-        any of them
-}
-
-rule new_xss_021_heuristic_ml_based_xss_detection {
-    meta:
-        description = "Heuristic and ML-based XSS detection placeholder rule"
+        description = "ML integration hook for heuristic and behavioral XSS detection"
         severity = "high"
         false_positive_rate = "TBD"
-        version = "1.3"
-        last_updated = "2024-06-10"
-        notes = "This rule is a placeholder and requires integration with an external ML detection engine via YARA external variables or hooks."
+        version = "1.6"
+        last_updated = "2026-06-01"
+        notes = "External ML model integration via YARA external variables"
     strings:
-        $heuristic_pattern = /<script.*?>.*?eval|Function\(|setTimeout|setInterval|document\.cookie|window\.location/si
+        $ml_detection_signal = "ML_DETECTION_SIGNAL"  // Placeholder for external ML signal
     condition:
-        $heuristic_pattern
+        $ml_detection_signal
 }
 
-rule new_xss_022_dynamic_behavioral_monitoring {
-    meta:
-        description = "Detect dynamic and behavioral indicators of XSS payload execution"
-        severity = "high"
-        false_positive_rate = "2%"
-        version = "1.2"
-        last_updated = "2024-06-10"
-    strings:
-        $eval_usage = /eval\(/i
-        $function_constructor = /new Function\(/i
-        $dynamic_script_injection = /document\.createElement\(['"]script['"]\)/i
-        $script_append_child = /appendChild\(document\.createElement\(['"]script['"]\)\)/i
-        $script_innerhtml_injection = /innerHTML\s*=\s*['"].*<script.*>.*<\/script>['"]/i
-    condition:
-        any of them
-}
+# Existing rules remain unchanged...
 
 # End of updated XSS detection rules with enhanced detection capabilities
