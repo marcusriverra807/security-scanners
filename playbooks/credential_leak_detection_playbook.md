@@ -87,7 +87,16 @@ Common detection rules and patterns include:
 - Enrich alerts with threat intelligence feeds and public code repository scans.
 - Prioritize alerts using risk scoring based on asset criticality and exposure.
 - Review leaked credential data or incident details that triggered the alert.
-- TODO(rahul): Add checklist for alert validation and escalation criteria.
+- Checklist for Alert Validation and Escalation Criteria:
+  - Confirm alert corresponds to a valid detection pattern and rule.
+  - Verify exposed credential is unique and not a known false positive.
+  - Assess whether the credential is currently active or revoked.
+  - Determine the scope of exposure (public repo, internal logs, etc.).
+  - Evaluate asset criticality and potential impact.
+  - Prioritize based on exposure severity and risk score.
+  - Escalate immediately if critical system or high-risk data exposure.
+  - Escalate if there is evidence of active exploitation or suspicious activity.
+  - Document all validation steps and rationale.
 
 ### 2. Investigation
 - Analyze the source of the alert (e.g., source code repository, network logs, application logs).
@@ -97,14 +106,27 @@ Common detection rules and patterns include:
 - Utilize user behavior analytics to identify insider threats.
 - Consult known credential patterns and detection rule test cases for reference.
 - Use automated investigation tools and queries where applicable.
-- TODO(rahul): Define specific queries and tools used for investigation.
+- Specific Queries and Tools Used for Investigation:
+  - Use API calls to cloud providers (AWS, Azure, GCP) to check key status and usage logs.
+  - Query SIEM tools (Splunk, QRadar) for related events and anomalies.
+  - Run automated scripts to scan source code repositories for similar leaks.
+  - Perform network traffic analysis with tools like Wireshark or Zeek.
+  - Use UEBA platforms to identify unusual user behaviors.
+  - Leverage threat intelligence feeds to correlate with known campaigns.
+  - Tools: AWS CLI, Azure CLI, GCP SDK, Splunk Search Processing Language (SPL), jq, TruffleHog, GitGuardian.
 
 ### 3. Containment
 - Immediately revoke or rotate exposed credentials using automation through cloud and secret management APIs.
 - Block access or isolate affected systems to prevent further leakage.
 - Apply temporary filters or rules to prevent automated exploitation.
 - Recommend network segmentation to isolate compromised systems.
-- TODO(rahul): Specify automation tools and playbooks integrated for containment.
+- Automation Tools and Playbooks Integrated for Containment:
+  - Use SOAR platforms (Cortex XSOAR, Splunk Phantom) to automate credential revocation.
+  - Integrate with cloud secret managers (AWS Secrets Manager, Azure Key Vault) for automated rotation.
+  - Employ Infrastructure as Code (IaC) tools (Terraform, Ansible) to update firewall rules dynamically.
+  - Use scripts to block compromised accounts and isolate affected systems.
+  - Automated ticket creation in ITSM platforms (ServiceNow, Jira) for incident tracking.
+  - Leverage webhook integrations for real-time alerting and containment workflows.
 
 ### 4. Remediation
 - Remove exposed credentials from source code or logs.
