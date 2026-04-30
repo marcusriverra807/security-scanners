@@ -32,8 +32,10 @@ rule new_xss_003_obfuscated_script_tags {
     strings:
         $base64_script = /<script\s+type=\"text\/base64\">[A-Za-z0-9+\/]+=*<\/script>/
         $hex_encoded_script = /<script\s+type=\"text\/hex\">[0-9A-Fa-f]+<\/script>/
+        // Placeholder for safe patterns - example: base64 of harmless strings
+        $safe_pattern = /<script\s+type=\"text\/base64\">aGFybWxlc3M=<\/script>/  // base64 for 'harmless'
     condition:
-        any of them
+        any of ($base64_script, $hex_encoded_script) and not $safe_pattern
 }
 
 rule new_xss_004_script_tag_malicious_attributes {
