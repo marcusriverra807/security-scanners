@@ -1,0 +1,39 @@
+Test Cases for new YARA-style XSS Detection Rules
+
+1. new_xss_001_url_encoding_attacks
+  - Test URL encoded payloads like %3Cscript%3Ealert(1)%3C/script%3E
+  - Test non-encoded benign URLs to check false positives
+
+2. new_xss_002_dom_based_xss
+  - Test injection of document.write and innerHTML in input
+  - Test benign usage of DOM methods without malicious payload
+
+3. new_xss_004_script_tag_malicious_attributes
+  - Test <script src="javascript:alert(1)"></script>
+  - Test <script src="https://trusted.com/script.js"></script>
+
+4. new_xss_005_dynamic_script_execution
+  - Test eval("alert('XSS')") and Function("alert('XSS')")
+  - Test other function calls without eval or Function
+
+5. new_xss_006_inline_event_handlers
+  - Test inline event handlers like onmouseover="alert('XSS')"
+  - Test benign inline event handlers in safe contexts
+
+6. new_xss_007_svg_element_attribute_injection
+  - Test <svg onload="alert('XSS')"></svg> injection
+  - Test SVG without event handlers
+
+7. new_xss_008_html_entity_encoded_script_injection
+  - Test HTML entity encoded script tags like &lt;script&gt;alert(1)&lt;/script&gt;
+  - Test encoded benign HTML entities
+
+8. new_xss_009_iframe_injection_attempts
+  - Test <iframe src="javascript:alert(1)"></iframe>
+  - Test <iframe src="https://trusted.com"></iframe>
+
+9. new_xss_010_dangerous_dom_methods
+  - Test dangerous DOM methods like innerHTML, document.write in input
+  - Test benign DOM method usage
+
+Each test case should include positive payloads for detection and negative payloads to check false positives.
