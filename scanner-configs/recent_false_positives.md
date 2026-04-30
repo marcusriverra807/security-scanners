@@ -28,8 +28,8 @@ This document captures recent false positive instances detected by the security 
 - Additional contextual information: Detected in commit abc123
 
 ### 6. Suggested Rule Adjustment
-- Proposed changes to the detection rule to avoid this false positive: 
-- Rationale for the suggested adjustment: 
+- Proposed changes to the detection rule to avoid this false positive: Modify the rule to better recognize encoded script tags that are harmless or apply a whitelist for certain contexts or encoding patterns.
+- Rationale for the suggested adjustment: To reduce false positives caused by safe encoded scripting content and improve detection accuracy.
 
 ### 7. Reviewer Information
 - Name of the person reporting: 
@@ -64,8 +64,8 @@ This document captures recent false positive instances detected by the security 
 - Additional contextual information: Detected in commit def456
 
 ### 6. Suggested Rule Adjustment
-- Proposed changes to the detection rule to avoid this false positive: 
-- Rationale for the suggested adjustment: 
+- Proposed changes to the detection rule to avoid this false positive: Enhance the rule to consider context-based sanitation verification or integrate with application-level sanitization checks.
+- Rationale for the suggested adjustment: To prevent flagging properly sanitized inputs as potential SQL injection attempts, reducing noise and focusing on real threats.
 
 ### 7. Reviewer Information
 - Name of the person reporting: 
