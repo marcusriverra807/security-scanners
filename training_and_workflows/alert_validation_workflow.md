@@ -33,6 +33,16 @@ To provide a structured and repeatable process for validating credential leak al
 9. **Document Validation**
    - Record all steps, rationale, and decisions made during validation.
 
+## Continuous Improvement Practices
+
+- **Feedback Mechanisms**
+  - Collect feedback from incident responders and stakeholders on the alert validation process.
+  - Incorporate lessons learned from incidents and near misses.
+  
+- **Review Intervals**
+  - Schedule regular reviews of the alert validation workflow (e.g., quarterly).
+  - Update detection patterns, prioritization criteria, and escalation paths based on new threats and organizational changes.
+
 ---
 
 _Last updated: 2026-04-30_
