@@ -1,0 +1,54 @@
+{
+  "test_cases": [
+    {
+      "rule_id": "new-xss-028",
+      "description": "Test javascript: payload in href attribute",
+      "input": "<a href='javascript:alert(1)'>Click me</a>"
+    },
+    {
+      "rule_id": "new-xss-029",
+      "description": "Test CSS injection via style attribute",
+      "input": "<div style='background-image: url(javascript:alert(1))'>"
+    },
+    {
+      "rule_id": "new-xss-030",
+      "description": "Test script injection in src attribute of audio tag",
+      "input": "<audio src='javascript:alert(1)'></audio>"
+    },
+    {
+      "rule_id": "new-xss-031",
+      "description": "Test XSS via Angular template expression",
+      "input": "<div>{{'\u003cscript\u003ealert(1)\u003c/script\u003e'}}</div>"
+    },
+    {
+      "rule_id": "new-xss-032",
+      "description": "Test XSS via React dangerouslySetInnerHTML",
+      "input": "React.createElement('div', {dangerouslySetInnerHTML: {__html: '<img src=x onerror=alert(1)>'}})"
+    },
+    {
+      "rule_id": "new-xss-033",
+      "description": "Test XSS via URL hash fragment manipulation",
+      "input": "http://example.com/#<script>alert(1)</script>"
+    },
+    {
+      "rule_id": "new-xss-034",
+      "description": "Test XSS via SVG animation elements",
+      "input": "<svg><animate attributeName='x' from='0' to='100' onbegin='alert(1)'/></svg>"
+    },
+    {
+      "rule_id": "new-xss-035",
+      "description": "Test XSS via WebRTC API",
+      "input": "new RTCPeerConnection({iceServers:[{url:'javascript:alert(1)'}]})"
+    },
+    {
+      "rule_id": "new-xss-036",
+      "description": "Test reflected XSS in HTTP headers",
+      "input": "HTTP/1.1 200 OK\nSet-Cookie: session=<script>alert(1)</script>; path=/"
+    },
+    {
+      "rule_id": "new-xss-037",
+      "description": "Test XSS with combined encoding and obfuscation",
+      "input": "<scr\u0069pt>al\x65rt(1)</scr\u0069pt>"
+    }
+  ]
+}
