@@ -162,6 +162,74 @@ rule new_xss_014_template_literal_injection {
         $template_literal
 }
 
+rule new_xss_015_html5_data_attributes {
+    meta:
+        description = "Detect malicious use of HTML5 data attributes for XSS"
+        severity = "medium"
+        false_positive_rate = "4%"
+    strings:
+        $data_attr_injection = /data-\w+\s*=\s*['"]?javascript:|data-\w+\s*=\s*['"]?eval\(/ 
+    condition:
+        $data_attr_injection
+}
+
+rule new_xss_016_shadow_dom_injection {
+    meta:
+        description = "Detect suspicious Shadow DOM manipulations that could lead to XSS"
+        severity = "high"
+        false_positive_rate = "3%"
+    strings:
+        $shadow_dom = /attachShadow|shadowRoot|::shadow|shadowDOM/
+    condition:
+        $shadow_dom
+}
+
+rule new_xss_017_webassembly_code_injection {
+    meta:
+        description = "Detect potential XSS via WebAssembly code injection"
+        severity = "high"
+        false_positive_rate = "2%"
+    strings:
+        $webassembly = /WebAssembly\.instantiate|WebAssembly\.compile|wasm/
+    condition:
+        $webassembly
+}
+
+rule new_xss_018_service_worker_abuse {
+    meta:
+        description = "Detect abuse of Service Workers for persistent XSS"
+        severity = "high"
+        false_positive_rate = "3%"
+    strings:
+        $service_worker = /ServiceWorker\.register|onfetch|onmessage/
+    condition:
+        $service_worker
+}
+
+rule new_xss_019_content_security_policy_bypass {
+    meta:
+        description = "Detect attempts to bypass Content Security Policy via script-src manipulation"
+        severity = "high"
+        false_positive_rate = "3%"
+    strings:
+        $csp_bypass = /content-security-policy.*script-src.*unsafe-inline|content-security-policy.*script-src.*data:/
+    condition:
+        $csp_bypass
+}
+
+rule new_xss_020_obfuscated_js_strings {
+    meta:
+        description = "Detect heavily obfuscated JavaScript strings using hex, octal, or escaped characters"
+        severity = "high"
+        false_positive_rate = "5%"
+    strings:
+        $hex_escape = /\\x[0-9A-Fa-f]{2}/
+        $octal_escape = /\\[0-7]{3}/
+        $escaped_unicode = /\\u\{[0-9A-Fa-f]+\}/
+    condition:
+        any of them
+}
+
 # XSS Detection Rules Review and Update Plan
 # This plan should be revisited and updated quarterly to ensure ongoing effectiveness
 
