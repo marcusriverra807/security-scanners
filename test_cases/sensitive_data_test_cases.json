@@ -1,0 +1,49 @@
+{
+  "test_cases": [
+    {
+      "rule_id": "sensitive-001",
+      "description": "Test hardcoded API keys",
+      "input": "API_KEY='1234567890abcdef1234567890abcdef'",
+      "severity": "high",
+      "source_reference": "https://owasp.org/www-community/vulnerabilities/Information_Exposure",
+      "expected_detection": "Detect hardcoded API keys in code",
+      "complexity": "low"
+    },
+    {
+      "rule_id": "sensitive-002",
+      "description": "Test hardcoded secrets",
+      "input": "password='mypassword123'",
+      "severity": "high",
+      "source_reference": "https://owasp.org/www-community/vulnerabilities/Information_Exposure",
+      "expected_detection": "Detect hardcoded secrets in code",
+      "complexity": "low"
+    },
+    {
+      "rule_id": "sensitive-003",
+      "description": "Test OAuth access tokens",
+      "input": "oauth_token=ya29.a0ARrdaM9...",
+      "severity": "high",
+      "source_reference": "https://oauth.net/2/",
+      "expected_detection": "Detect OAuth access tokens in code",
+      "complexity": "medium"
+    },
+    {
+      "rule_id": "sensitive-004",
+      "description": "Test private keys",
+      "input": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkq...",
+      "severity": "high",
+      "source_reference": "https://www.openssl.org/docs/manmaster/man1/openssl-pkeyutl.html",
+      "expected_detection": "Detect private key patterns in code",
+      "complexity": "high"
+    },
+    {
+      "rule_id": "sensitive-005",
+      "description": "Test JWT secrets",
+      "input": "jwt_secret='supersecretkey'",
+      "severity": "high",
+      "source_reference": "https://jwt.io/",
+      "expected_detection": "Detect JWT secret keys in code",
+      "complexity": "medium"
+    }
+  ]
+}
