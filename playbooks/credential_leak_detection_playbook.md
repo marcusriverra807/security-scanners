@@ -80,6 +80,19 @@ Common detection rules and patterns include:
 - Integrate playbook steps with SOAR platforms for automated investigation and response.
 - Leverage orchestration to revoke credentials, update firewall rules, and notify teams.
 
+## Common False Positives
+- Generic strings that match API key patterns but are not actual keys.
+- Test or placeholder credentials used in development or testing environments.
+- Publicly available keys that are intentionally exposed for demo or public use.
+- Long base64 strings that are not secrets but encoded data or certificates.
+- Misclassified tokens or strings from unrelated logs or data.
+
+## Escalation and Contact Points
+- Security Operations Center (SOC): soc@example.com
+- Incident Response Team: irt@example.com
+- Cloud Security Team: cloudsec@example.com
+- Development Team Lead: devlead@example.com
+
 ## References
 - [Best practices for secret management](https://example.com/secret-management-best-practices)
 - [HashiCorp Vault](https://www.vaultproject.io/)
@@ -89,6 +102,8 @@ Common detection rules and patterns include:
 ## Notes
 - False positives are possible; validate alerts carefully.
 - Prompt response is critical to minimize risk from leaked credentials.
+- Ensure analysts have access to updated detection rules and automation playbooks.
+- Maintain clear communication channels for incident escalation.
 
 ---
 
