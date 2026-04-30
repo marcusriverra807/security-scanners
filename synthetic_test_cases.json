@@ -44,6 +44,46 @@
       "rule_id": "sensitive-002",
       "description": "Test hardcoded secrets",
       "input": "password='mypassword123'"
+    },
+    {
+      "rule_id": "new-xss-007",
+      "description": "Test SVG element attribute injection",
+      "input": "<svg><a xmlns:xlink='http://www.w3.org/1999/xlink' xlink:href='javascript:alert(1)'>Click me</a></svg>"
+    },
+    {
+      "rule_id": "new-xss-008",
+      "description": "Test HTML entity encoded script injection",
+      "input": "&lt;script&gt;alert(&#x31;);&lt;/script&gt;"
+    },
+    {
+      "rule_id": "new-xss-009",
+      "description": "Test iframe injection attempt",
+      "input": "<iframe src='http://malicious-site.com'></iframe>"
+    },
+    {
+      "rule_id": "new-xss-010",
+      "description": "Test dangerous DOM method innerHTML",
+      "input": "element.innerHTML = '<img src=x onerror=alert(1)>';"
+    },
+    {
+      "rule_id": "new-xss-011",
+      "description": "Test base64 encoded XSS payload",
+      "input": "PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg=="
+    },
+    {
+      "rule_id": "new-xss-012",
+      "description": "Test suspicious CSS expressions",
+      "input": "<div style='width: expression(alert(1));'></div>"
+    },
+    {
+      "rule_id": "new-xss-013",
+      "description": "Test Content Security Policy violation pattern",
+      "input": "script-src 'unsafe-inline'; alert(1);"
+    },
+    {
+      "rule_id": "new-xss-014",
+      "description": "Test reflected XSS pattern in HTTP request",
+      "input": "GET /search?q=<script>alert(1)</script> HTTP/1.1"
     }
   ]
 }
