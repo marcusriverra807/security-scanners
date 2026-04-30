@@ -29,8 +29,7 @@ The following patterns will be monitored for potential SQL injection attempts:
    - Implement logging mechanisms for all failed queries or suspicious patterns to analyze attack attempts.
 
 7. **New Detection Rules**:
-   - **Advanced SQL Injection Patterns**  
-     - **Rule**: Monitor for time-based blind injection patterns.  
+   - **Rule**: Monitor for time-based blind injection patterns.  
      - **Pattern**: `1; WAITFOR DELAY '00:00:05'`  
      - **Rule ID**: `sql-005`
      - **Severity**: High
@@ -38,6 +37,24 @@ The following patterns will be monitored for potential SQL injection attempts:
      - **Test Cases**:
        - Input: `1; WAITFOR DELAY '00:00:05'` (Expected: true)
        - Input: `SELECT * FROM users;` (Expected: false)
+   - **New Rule for Common Encodings**:
+     - **Rule**: Detect encoded SQL injection patterns.
+     - **Pattern**: `%27 OR 1=1 --`
+     - **Rule ID**: `sql-006`
+     - **Severity**: High
+     - **Context**: Identify attempts to bypass filters using URL encoding.
+     - **Test Cases**:
+       - Input: `%27 OR 1=1 --` (Expected: true)
+       - Input: `SELECT * FROM products;` (Expected: false)
+   - **New Rule for Evasive Techniques**:
+     - **Rule**: Detect usage of comment-based injections.
+     - **Pattern**: `1=1 /* comment */`
+     - **Rule ID**: `sql-007`
+     - **Severity**: High
+     - **Context**: Identify attempts to obfuscate SQL injections.
+     - **Test Cases**:
+       - Input: `1=1 /* comment */` (Expected: true)
+       - Input: `SELECT * FROM orders;` (Expected: false)
 
 ## Recommended Actions
 - Review the application's SQL query handling to ensure proper parameterization.  
