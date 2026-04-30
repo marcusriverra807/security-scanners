@@ -1,7 +1,7 @@
 # Credential Leak Detection Playbook
 
 ## Overview
-This playbook provides a structured response plan for alerts triggered by credential leak detection rules. It is designed to guide security analysts through the investigation, validation, containment, and remediation of potential credential leakage incidents.
+This playbook provides a structured response plan for alerts triggered by credential leak detection rules. It is designed to guide security analysts through the investigation, validation, containment, remediation, and recovery of potential credential leakage incidents.
 
 ## Alert Pattern
 The alert patterns are based on detection rules targeting common credential leak vectors such as exposed API keys, passwords, tokens, and other sensitive information in source code, logs, or network traffic.
@@ -32,34 +32,59 @@ Common detection rules and patterns include:
    - Regex: `(?i)(password|passwd|pwd)["'=:\s]+.{6,}`
    - Description: Detect common password variable assignments in code or config files.
 
+7. **Detect Azure and GCP Keys**
+   - Regex: `(?i)(azure|gcp|google)["'=:\s]+[0-9a-zA-Z\-]{20,40}`
+   - Description: Detect Azure and Google Cloud Platform credentials.
+
+8. **Detect OAuth Tokens and JWTs**
+   - Regex: `eyJ[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}`
+   - Description: Detect JSON Web Tokens commonly used for OAuth authentication.
+
+9. **Entropy-Based Detection**
+   - Description: Detect high entropy strings that may indicate secrets.
+
 ## Response Steps
 
 ### 1. Alert Triage
 - Verify the alert against the detection rule ID and description.
-- Check the context and severity to prioritize response.
-- Review the leaked credential data or incident details that triggered the alert.
+- Check the context, severity, and asset criticality to prioritize response.
+- Enrich alerts with threat intelligence and public code repository scans.
+- Review leaked credential data or incident details that triggered the alert.
 
 ### 2. Investigation
 - Analyze the source of the alert (e.g., source code repository, network logs, application logs).
-- Validate if the exposed credential is active and the extent of exposure.
+- Validate if the exposed credential is active and determine exposure extent.
+- Check credential usage logs for suspicious activity.
+- Correlate with other security events such as unusual logins or data exfiltration.
 - Consult known credential patterns and detection rule test cases for reference.
 
 ### 3. Containment
-- Immediately revoke or rotate exposed credentials if possible.
+- Immediately revoke or rotate exposed credentials using automation where possible.
 - Block access or isolate affected systems to prevent further leakage.
 - Apply temporary filters or rules to prevent automated exploitation.
+- Recommend network segmentation to isolate compromised systems.
 
 ### 4. Remediation
 - Remove exposed credentials from source code or logs.
+- Implement secure storage solutions such as HashiCorp Vault, AWS Secrets Manager.
+- Integrate automated secret scanning and secure coding practices in CI/CD pipelines.
 - Educate developers and staff on secure credential management practices.
-- Implement secure storage solutions such as secret management tools.
+- Conduct security awareness training focused on credential handling.
 
 ### 5. Recovery
-- Monitor for any further credential leak alerts.
+- Monitor for any further credential leak alerts and reused or rotated secrets.
 - Conduct a post-incident review and update detection rules and response plans as needed.
+- Use incident communication templates to notify stakeholders.
+
+## Playbook Automation
+- Integrate playbook steps with SOAR platforms for automated investigation and response.
+- Leverage orchestration to revoke credentials, update firewall rules, and notify teams.
 
 ## References
 - [Best practices for secret management](https://example.com/secret-management-best-practices)
+- [HashiCorp Vault](https://www.vaultproject.io/)
+- [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/)
+- [OWASP Credential Management](https://owasp.org/www-project-credential-management/)
 
 ## Notes
 - False positives are possible; validate alerts carefully.
