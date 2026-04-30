@@ -1,0 +1,49 @@
+{
+  "test_cases": [
+    {
+      "rule_id": "new-xss-001",
+      "description": "Test URL encoding attacks",
+      "input": "%3Cscript%3Ealert(1)%3C/script%3E",
+      "severity": "high",
+      "source_reference": "https://owasp.org/www-community/attacks/xss/",
+      "expected_detection": "Detect URL encoded XSS payloads",
+      "complexity": "medium"
+    },
+    {
+      "rule_id": "new-xss-002",
+      "description": "Test DOM-based XSS",
+      "input": "document.write('<img src=x onerror=alert(1)>')",
+      "severity": "high",
+      "source_reference": "https://owasp.org/www-community/attacks/xss/",
+      "expected_detection": "Detect dangerous DOM manipulation methods and event handlers",
+      "complexity": "high"
+    },
+    {
+      "rule_id": "new-xss-003",
+      "description": "Test deprecated HTML attributes",
+      "input": "<script onclick='alert(1)'>",
+      "severity": "medium",
+      "source_reference": "https://owasp.org/www-community/attacks/xss/",
+      "expected_detection": "Detect deprecated or dangerous HTML attributes",
+      "complexity": "medium"
+    },
+    {
+      "rule_id": "new-xss-004",
+      "description": "Test script tag with attributes",
+      "input": "<script src='malicious.js' onerror='alert(1)'></script>",
+      "severity": "high",
+      "source_reference": "https://owasp.org/www-community/attacks/xss/",
+      "expected_detection": "Detect script tags with malicious attributes",
+      "complexity": "high"
+    },
+    {
+      "rule_id": "new-xss-005",
+      "description": "Test dynamic script execution",
+      "input": "eval('alert(1)'); setTimeout('alert(1)',1000);",
+      "severity": "high",
+      "source_reference": "https://owasp.org/www-community/attacks/xss/",
+      "expected_detection": "Detect dynamic JavaScript execution methods",
+      "complexity": "high"
+    }
+  ]
+}
