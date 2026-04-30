@@ -56,7 +56,7 @@ rule new_xss_005_dynamic_script_execution {
         severity = "high"
         false_positive_rate = "1%"
     strings:
-        $dynamic_execution = /eval\(|Function\(/
+        $dynamic_execution = /eval\(|Function\(/ 
     condition:
         $dynamic_execution
 }
