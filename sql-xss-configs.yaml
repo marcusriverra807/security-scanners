@@ -20,7 +20,7 @@ rules:
     pattern: "<svg.*?onload=.*?"
     severity: "high"
   - id: xss-005
-    description: "Detect iframe with JavaScript injection"
+    description: "Detect iframe with JavaScript injection and malicious payloads"
     pattern: "<iframe.*?src=\"javascript:.*?\".*?>"
     severity: "high"
   - id: xss-006
@@ -34,4 +34,8 @@ rules:
   - id: xss-008
     description: "Detect eval() function usage"
     pattern: "eval\s*\(.*?\)"
+    severity: "high"
+  - id: xss-009
+    description: "Detect DOM-based XSS vulnerabilities"
+    pattern: "document\.(location|cookie|referrer|URL|documentURI|baseURI|URLUnencoded)"
     severity: "high"
