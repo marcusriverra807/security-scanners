@@ -35,3 +35,15 @@ rules:
     description: "Detect URL parameter injection"
     pattern: "(?<=\?|&)\w+=.*?"
     severity: "high"
+  - id: xss-009
+    description: "Detect reflected XSS attacks in input fields"
+    pattern: "<input.*?(value=\".*?<script.*?>.*?<\/script>.*?\"|onfocus=\".*?\")"
+    severity: "high"
+  - id: xss-010
+    description: "Detect stored XSS vulnerabilities in user profile sections"
+    pattern: "<div class=\"user-profile\">.*?<script.*?>.*?<\/script>.*?<\/div>"
+    severity: "high"
+  - id: xss-011
+    description: "Detect output encoding issues in HTML contexts"
+    pattern: "&lt;|&gt;|&amp;|&quot;"
+    severity: "medium"
