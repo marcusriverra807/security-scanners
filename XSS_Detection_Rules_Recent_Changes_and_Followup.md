@@ -17,7 +17,7 @@ Recent updates to the XSS detection rules focus on addressing false positive (FP
    - Continuously monitor detection outcomes to ensure false positives remain low without impacting true positive rates.
    - Analyze new false positives and update whitelists and tuning parameters accordingly.
 
-2. **Documentation and Communication**
+2. **Documentation and Communication
    - Maintain detailed documentation of rule changes, tuning rationales, and observed impacts.
    - Share findings with detection engineering and triage teams for awareness and feedback.
 
