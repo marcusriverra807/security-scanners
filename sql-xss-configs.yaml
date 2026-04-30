@@ -29,7 +29,7 @@ rules:
     runbook_link: "https://example.com/runbook/xss-detection"
   - id: xss-002
     description: "Detect JavaScript URLs with refined pattern"
-    pattern: "(?i)javascript:(?!void\\(0\\))[^\s'"]+|data:text/html[^\s'"]+|onerror\\s*=\\s*['\"]javascript:[^'\"]*['\"]"
+    pattern: "(?i)javascript:(?!void\\(0\\))[^\s'\"]+|data:text/html[^\s'\"]+|onerror\\s*=\\s*['\"]javascript:[^'\"]*['\"]"
     severity: "high"
     context: "Avoid untrusted JavaScript URLs and inline event handlers that execute JavaScript, excluding common benign void(0) calls."
     test_cases:
@@ -123,3 +123,27 @@ rules:
         expected: "true"
       - input: "<div>No event</div>"
         expected: "false"
+  - id: xss-008
+    description: "Detect iframe injection attempts"
+    pattern: "(?i)<iframe[^>]+src=['\"]?javascript:[^'\"]+['\"]?[^>]*>"
+    severity: "high"
+    context: "Detect iframe elements that load JavaScript sources, commonly used in XSS attacks."
+    test_cases:
+      - input: "<iframe src='javascript:alert(1)'></iframe>"
+        expected: "true"
+      - input: "<iframe src='http://safe.com'></iframe>"
+        expected: "false"
+    estimated_fp_rate: "2%"
+    runbook_link: "https://example.com/runbook/iframe-injection"
+  - id: xss-009
+    description: "Detect usage of eval() function in inline scripts"
+    pattern: "eval\\s*\\((.*?)\\)"
+    severity: "high"
+    context: "Detect usage of eval() function in scripts which can lead to code execution vulnerabilities."
+    test_cases:
+      - input: "<script>eval('alert(1)')</script>"
+        expected: "true"
+      - input: "<script>console.log('test')</script>"
+        expected: "false"
+    estimated_fp_rate: "1%"
+    runbook_link: "https://example.com/runbook/eval-detection"
