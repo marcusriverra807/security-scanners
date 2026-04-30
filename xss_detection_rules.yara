@@ -246,8 +246,11 @@ rule new_xss_016_websocket_serviceworker_payload {
 # 6. Feedback Mechanism
 # - Establish channels for feedback from incident responders and users to refine rules.
 
-# 7. Automation
-# - Automate data collection and initial analysis to support rule review process.
+# 7. Automation Enhancements
+# - Automate continuous feedback collection and analysis pipelines.
+# - Integrate dynamic threat intelligence feeds via YARA external variables.
+# - Implement automated false positive and false negative reporting.
+# - Develop automated rule tuning and deployment pipelines.
 
 # 8. Reporting
 # - Generate quarterly reports on rule performance and planned updates.
