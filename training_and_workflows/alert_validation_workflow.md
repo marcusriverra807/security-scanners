@@ -7,6 +7,9 @@ To provide a structured and repeatable process for validating credential leak al
 
 1. **Receive Alert**
    - Monitor alerts triggered by credential leak detection rules.
+   - Utilize centralized alerting platforms (e.g., SIEM, SOAR) to aggregate and correlate alerts.
+   - Configure real-time notifications and dashboards to promptly detect credential leak alerts.
+   - Establish alert thresholds and filters to reduce noise and focus on high-confidence detections.
 
 2. **Verify Detection Pattern**
    - Confirm the alert matches a valid detection regex pattern.
