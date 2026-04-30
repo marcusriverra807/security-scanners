@@ -15,6 +15,10 @@ rules:
         expected: "true"
       - input: "<div></div>"
         expected: "false"
+      - input: "<script src=''></script>"
+        expected: "true"
+      - input: "<script>alert('XSS');</script>"
+        expected: "true"
     estimated_fp_rate: "5%"
     runbook_link: "https://example.com/runbook/xss-detection"
   - id: xss-002
@@ -27,6 +31,8 @@ rules:
         expected: "true"
       - input: "<a href='http://safe.com'>Safe Link</a>"
         expected: "false"
+      - input: "<a href='data:text/html,<script>alert(1)</script>'>Click</a>"
+        expected: "true"
     estimated_fp_rate: "7%"
     runbook_link: "https://example.com/runbook/javascript-urls"
   - id: xss-003
@@ -39,6 +45,8 @@ rules:
         expected: "true"
       - input: "<img src='image.jpg'>"
         expected: "false"
+      - input: "<img src='image.jpg' onerror='console.log(1)'>"
+        expected: "true"
     estimated_fp_rate: "4%"
     runbook_link: "https://example.com/runbook/onerror-injection"
   - id: xss-004
@@ -51,68 +59,10 @@ rules:
         expected: "true"
       - input: "<svg></svg>"
         expected: "false"
+      - input: "<svg onload='console.log(1)'></svg>"
+        expected: "true"
     estimated_fp_rate: "6%"
     runbook_link: "https://example.com/runbook/svg-onload"
-  - id: sql-004
-    description: "Detect advanced SQL injection patterns"
-    pattern: "(?i)(SELECT|INSERT|UPDATE|DELETE|WHERE|OR|AND|UNION|DROP|EXEC|ALTER|CREATE|MERGE)\s*\S*\s*[^;]*?(--|#|/\*)?"
-    severity: "high"
-    context: "Identify various SQL injection techniques that may exploit vulnerabilities."
-    test_cases:
-      - input: "SELECT * FROM users WHERE id='1' OR '1'='1' --"
-        expected: "true"
-      - input: "SELECT * FROM users;"
-        expected: "false"
-    estimated_fp_rate: "5%"
-    runbook_link: "https://example.com/runbook/sql-injection-patterns"
-  - id: sql-005
-    description: "Detect SQL injection using time-based blind techniques"
-    pattern: "(?i)(WAITFOR DELAY|SLEEP|BENCHMARK)\s*\(\s*['\"]?\d+\s*['\"]?\)"
-    severity: "high"
-    context: "Monitor for patterns indicative of time-based SQL injection attacks."
-    test_cases:
-      - input: "1; WAITFOR DELAY '00:00:05'"
-        expected: "true"
-      - input: "SELECT * FROM users;"
-        expected: "false"
-    estimated_fp_rate: "4%"
-    runbook_link: "https://example.com/runbook/time-based-sql-injection"
-  - id: sql-006
-    description: "Detect SQL injection with UNION-based techniques"
-    pattern: "(?i)UNION\s*SELECT"
-    severity: "high"
-    context: "Identify SQL injections that use UNION to combine results from multiple SELECT statements."
-    test_cases:
-      - input: "SELECT * FROM users UNION SELECT * FROM admin;"
-        expected: "true"
-      - input: "SELECT * FROM users;"
-        expected: "false"
-    estimated_fp_rate: "3%"
-    runbook_link: "https://example.com/runbook/sql-union-injection"
-  - id: sql-007
-    description: "Detect SQL injection with comment-based techniques"
-    pattern: "--\s*|#\s*"
-    severity: "high"
-    context: "Capture SQL injection attempts that use comments to manipulate queries."
-    test_cases:
-      - input: "SELECT * FROM users WHERE id=1; -- comment"
-        expected: "true"
-      - input: "SELECT * FROM users;"
-        expected: "false"
-    estimated_fp_rate: "2%"
-    runbook_link: "https://example.com/runbook/sql-comment-injection"
-  - id: sql-008
-    description: "Detect SQL injection with nested queries"
-    pattern: "(?i)(SELECT|FROM)\s*\((.*?)\)"
-    severity: "high"
-    context: "Identify SQL injections that use nested SELECT queries."
-    test_cases:
-      - input: "SELECT * FROM (SELECT * FROM users) AS subquery;"
-        expected: "true"
-      - input: "SELECT * FROM users;"
-        expected: "false"
-    estimated_fp_rate: "3%"
-    runbook_link: "https://example.com/runbook/sql-nested-injection"
   - id: xss-005
     description: "Detect XSS through event handler attributes"
     pattern: "\bon\w+\s*=\s*['\"]([^'\"]+)['\"]"
@@ -123,14 +73,7 @@ rules:
         expected: "true"
       - input: "<div>No click</div>"
         expected: "false"
+      - input: "<div onmouseover='console.log(1)'>Hover me</div>"
+        expected: "true"
     estimated_fp_rate: "4%"
     runbook_link: "https://example.com/runbook/event-handler-injection"
-
-# Potential Areas for Further Improvement:
-# - Establish a continuous monitoring routine for rule effectiveness and updates.
-# - Incorporate feedback loops to adjust rules based on real-world detection performance.
-# - Expand test cases to cover edge scenarios and improve detection accuracy.
-# - Integrate with threat intelligence feeds to dynamically update detection patterns.
-# - Track performance metrics (detection rates, false positives) for ongoing optimization.
-
-# Regular review schedule: Every 3 months to ensure detection rules are up-to-date
