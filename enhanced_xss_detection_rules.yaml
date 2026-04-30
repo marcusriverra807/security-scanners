@@ -2,4 +2,25 @@
 
 - rule_id: enhanced_xss_rule
   description: Detects XSS using advanced patterns
-  regex: '(<.*?\s+on\w+\s*=)'\n  action: alert
+  regex: '(<.*?\s+on\w+\s*=)|(javascript:\s*alert\()|(document\.cookie)|(eval\()|(\bprompt\()|(\bconfirm\()'
+  action: alert
+
+- rule_id: xss_payload_pattern_1
+  description: Detects common XSS payloads in input
+  regex: '(<script>|<img\s+src=|<iframe>|<svg\s+xmlns=)'
+  action: alert
+
+- rule_id: xss_payload_pattern_2
+  description: Detects obfuscated XSS payloads
+  regex: '(%3Cscript%3E|%3Cimg%20src%3D|%3Ciframe%3E|%3Csvg%20xmlns%3D)'
+  action: alert
+
+- rule_id: xss_payload_pattern_3
+  description: Detects XSS attempts using event handlers
+  regex: '(onerror=|onload=|onclick=|onmouseover=)'
+  action: alert
+
+- rule_id: xss_payload_pattern_4
+  description: Detects XSS attempts using data URIs
+  regex: '(data:text\/html|data:text\/javascript)'
+  action: alert
