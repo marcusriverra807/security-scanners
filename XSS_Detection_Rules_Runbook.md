@@ -29,7 +29,9 @@ This runbook documents the new YARA-style XSS detection rules, their description
 - **Estimated False Positive Rate:** 3%
 
 ### Test Cases
-- (Add relevant test cases as needed)
+- Test base64 encoded script tags like <script type="text/base64">PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==</script>
+- Test hex encoded script tags like <script type="text/hex">3c7363726970743e616c6572742831293c2f7363726970743e</script>
+- Test benign script tags without encoding
 
 ---
 
