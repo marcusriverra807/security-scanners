@@ -1,0 +1,49 @@
+{
+  "test_cases": [
+    {
+      "rule_id": "new-sql-001",
+      "description": "Test time-based SQL injection",
+      "input": "SELECT * FROM users WHERE id=1; WAITFOR DELAY '00:00:10'",
+      "severity": "high",
+      "source_reference": "https://owasp.org/www-community/attacks/SQL_Injection",
+      "expected_detection": "Detect time-based SQL injection payloads",
+      "complexity": "medium"
+    },
+    {
+      "rule_id": "new-sql-002",
+      "description": "Test error-based SQL injection",
+      "input": "' OR 1=1--",
+      "severity": "high",
+      "source_reference": "https://owasp.org/www-community/attacks/SQL_Injection",
+      "expected_detection": "Detect error-based SQL injection patterns",
+      "complexity": "medium"
+    },
+    {
+      "rule_id": "new-sql-003",
+      "description": "Test union-based SQL injection",
+      "input": "' UNION SELECT username, password FROM users--",
+      "severity": "high",
+      "source_reference": "https://owasp.org/www-community/attacks/SQL_Injection",
+      "expected_detection": "Detect union-based SQL injection payloads",
+      "complexity": "high"
+    },
+    {
+      "rule_id": "new-sql-004",
+      "description": "Test boolean-based blind SQL injection",
+      "input": "' AND 1=1--",
+      "severity": "medium",
+      "source_reference": "https://owasp.org/www-community/attacks/SQL_Injection",
+      "expected_detection": "Detect boolean-based blind SQL injection payloads",
+      "complexity": "medium"
+    },
+    {
+      "rule_id": "new-sql-005",
+      "description": "Test boolean-based blind SQL injection variant",
+      "input": "' AND 1=2--",
+      "severity": "medium",
+      "source_reference": "https://owasp.org/www-community/attacks/SQL_Injection",
+      "expected_detection": "Detect boolean-based blind SQL injection payload variants",
+      "complexity": "medium"
+    }
+  ]
+}
