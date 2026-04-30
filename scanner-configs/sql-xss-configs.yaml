@@ -1,38 +1,42 @@
 # Updated SQL Injection Detection Rules
 # Enhance existing detection rules to cover more cases
 
-# Updated XSS Detection Rules
-# Strengthen detection of XSS payloads and update filter rules
+# Updated XSS Detection Rules with improved specificity and comments
 xss_detection_rules:
   - name: "Basic XSS Payloads"
+    # Detect common script-based XSS payloads, avoiding overly generic patterns
     patterns:
-      - "<script>alert('XSS')</script>"
-      - "<img src=x onerror=alert('XSS')>"
-      - "<svg><script>alert('XSS')</script></svg>"
-      - "<script>document.write('<img src=x onerror=alert(1)>')</script>"
-      - "<svg/onload=alert('XSS')>"
+      - "<script>alert\('XSS'\)</script>"
+      - "<img src=x onerror=alert\('XSS'\)>"
+      - "<svg><script>alert\('XSS'\)</script></svg>"
+      - "<script>document.write\('<img src=x onerror=alert\(1\)>'\)</script>"
+      - "<svg/onload=alert\('XSS'\)>"
 
   - name: "Attribute-Based XSS"
+    # Target attribute injections that trigger JavaScript execution
     patterns:
-      - "<a href=javascript:alert('XSS')>Click me</a>"
-      - "<input onfocus=alert('XSS') autofocus>"
+      - "<a href=javascript:alert\('XSS'\)>Click me</a>"
+      - "<input onfocus=alert\('XSS'\) autofocus>"
 
   - name: "Event Handler XSS"
+    # Detect event handler attributes that may run scripts
     patterns:
-      - "<body onload=alert('XSS')>"
-      - "<div onclick=alert('XSS')>Click here!</div>"
+      - "<body onload=alert\('XSS'\)>"
+      - "<div onclick=alert\('XSS'\)>Click here!</div>"
       - "contextual patterns to check for event handlers in various HTML tags"
 
   - name: "URL-Based XSS"
+    # Identify XSS attempts embedded in URLs
     patterns:
-      - "http://evil.com?param=<script>alert('XSS')</script>"
-      - "http://example.com/#<script>alert('XSS')</script>"
+      - "http://evil.com?param=<script>alert\('XSS'\)</script>"
+      - "http://example.com/#<script>alert\('XSS'\)</script>"
 
   - name: "HTML Injection"
+    # Catch HTML comments with embedded scripts
     patterns:
-      - "<!--<script>alert('XSS')</script>-->"
+      - "<!--<script>alert\('XSS'\)</script>-->"
 
-# Ensure that the above patterns are applied across all request types
+# Ensure that the above patterns are applied across all relevant HTTP methods
 apply_to:
   - GET
   - POST
