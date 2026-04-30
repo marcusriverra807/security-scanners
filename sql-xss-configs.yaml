@@ -29,7 +29,8 @@ rules:
     runbook_link: "https://example.com/runbook/xss-detection"
   - id: xss-002
     description: "Detect JavaScript URLs with refined pattern"
-    pattern: "(?i)javascript:(?!void\\(0\\))[^\s'\"]+|data:text/html[^\s'\"]+|onerror\\s*=\\s*['\"]javascript:[^'\"]*['\"]"
+    pattern: "(?i)javascript:(?!void\\(0\\))[^
+\s'\"]+|data:text/html[^\s'\"]+|onerror\\s*=\\s*['\"]javascript:[^'\"]*['\"]"
     severity: "high"
     context: "Avoid untrusted JavaScript URLs and inline event handlers that execute JavaScript, excluding common benign void(0) calls."
     test_cases:
@@ -147,3 +148,71 @@ rules:
         expected: "false"
     estimated_fp_rate: "1%"
     runbook_link: "https://example.com/runbook/eval-detection"
+  
+  # New rules based on recommendations
+  - id: xss-010
+    description: "Detect usage of dangerous DOM methods that can lead to DOM-based XSS"
+    pattern: "(?i)(innerHTML|document\.write|document\.writeln|location\.hash|eval)"
+    severity: "high"
+    context: "Detect potentially dangerous JavaScript DOM methods that can be exploited for DOM-based XSS attacks."
+    test_cases:
+      - input: "element.innerHTML = '<img src=x onerror=alert(1)>'"
+        expected: "true"
+      - input: "document.write('<script>alert(1)</script>')"
+        expected: "true"
+      - input: "location.hash = '#<script>alert(1)</script>'"
+        expected: "true"
+      - input: "safeFunction()"
+        expected: "false"
+    estimated_fp_rate: "5%"
+    runbook_link: "https://example.com/runbook/dom-xss"
+  - id: xss-011
+    description: "Detect base64 encoded XSS payloads"
+    pattern: "(?i)(base64_encode|data:text\/html;base64,|data:text\/javascript;base64,)"
+    severity: "medium"
+    context: "Detect base64 encoded payloads in URLs or scripts that may bypass simple pattern matching."
+    test_cases:
+      - input: "data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg=="
+        expected: "true"
+      - input: "normal text"
+        expected: "false"
+    estimated_fp_rate: "10%"
+    runbook_link: "https://example.com/runbook/base64-xss"
+  - id: xss-012
+    description: "Detect suspicious CSS expressions and behaviors used in legacy XSS attacks"
+    pattern: "(?i)expression\(|behavior:\s*url\("
+    severity: "medium"
+    context: "Detect CSS expressions and behaviors that can be abused for XSS in older browsers."
+    test_cases:
+      - input: "div { width: expression(alert('XSS')); }"
+        expected: "true"
+      - input: "div { behavior: url(#default#VML); }"
+        expected: "true"
+      - input: "div { color: red; }"
+        expected: "false"
+    estimated_fp_rate: "5%"
+    runbook_link: "https://example.com/runbook/css-xss"
+  - id: xss-013
+    description: "Detect potential Content Security Policy (CSP) violations"
+    pattern: "(?i)(Content-Security-Policy|CSP)"
+    severity: "low"
+    context: "Detect CSP headers or violations that may indicate attempts to bypass XSS protections."
+    test_cases:
+      - input: "Content-Security-Policy: default-src 'none'; script-src 'self'"
+        expected: "true"
+      - input: "Random text"
+        expected: "false"
+    estimated_fp_rate: "5%"
+    runbook_link: "https://example.com/runbook/csp"
+  - id: xss-014
+    description: "Detect reflected XSS patterns in HTTP requests or responses"
+    pattern: "(?i)(\b<script\b|\bon\w+\s*=\s*['\"]|javascript:)"
+    severity: "high"
+    context: "Detect reflected XSS attack patterns commonly found in HTTP requests or responses."
+    test_cases:
+      - input: "GET /search?q=<script>alert(1)</script> HTTP/1.1"
+        expected: "true"
+      - input: "POST /login HTTP/1.1"
+        expected: "false"
+    estimated_fp_rate: "3%"
+    runbook_link: "https://example.com/runbook/reflected-xss"
