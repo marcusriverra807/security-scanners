@@ -1,0 +1,131 @@
+{
+  "proposal": {
+    "additional_test_cases": {
+      "sql_injection_variants": [
+        {
+          "rule_id": "new-sql-002",
+          "description": "Test error-based SQL injection",
+          "input": "' OR 1=1--",
+          "severity": "high",
+          "source_reference": "https://owasp.org/www-community/attacks/SQL_Injection",
+          "expected_detection": "alert on error-based SQLi patterns",
+          "complexity": "medium"
+        },
+        {
+          "rule_id": "new-sql-003",
+          "description": "Test union-based SQL injection",
+          "input": "' UNION SELECT username, password FROM users--",
+          "severity": "high",
+          "source_reference": "https://owasp.org/www-community/attacks/SQL_Injection",
+          "expected_detection": "alert on union-based SQLi patterns",
+          "complexity": "high"
+        },
+        {
+          "rule_id": "new-sql-004",
+          "description": "Test boolean-based blind SQL injection",
+          "input": "' AND 1=1--",
+          "severity": "medium",
+          "source_reference": "https://owasp.org/www-community/attacks/SQL_Injection",
+          "expected_detection": "alert on boolean-based blind SQLi patterns",
+          "complexity": "medium"
+        },
+        {
+          "rule_id": "new-sql-005",
+          "description": "Test boolean-based blind SQL injection variant",
+          "input": "' AND 1=2--",
+          "severity": "medium",
+          "source_reference": "https://owasp.org/www-community/attacks/SQL_Injection",
+          "expected_detection": "alert on boolean-based blind SQLi patterns",
+          "complexity": "medium"
+        }
+      ],
+      "additional_xss_vectors": [
+        {
+          "rule_id": "new-xss-007",
+          "description": "Test stored XSS",
+          "input": "<script>alert('stored xss')</script>",
+          "severity": "high",
+          "source_reference": "https://owasp.org/www-community/attacks/xss/",
+          "expected_detection": "alert on stored XSS payloads",
+          "complexity": "high"
+        },
+        {
+          "rule_id": "new-xss-008",
+          "description": "Test reflected XSS in attribute context",
+          "input": "<img src=x onerror=alert(1)>",
+          "severity": "high",
+          "source_reference": "https://owasp.org/www-community/attacks/xss/",
+          "expected_detection": "alert on reflected XSS in HTML attributes",
+          "complexity": "medium"
+        },
+        {
+          "rule_id": "new-xss-009",
+          "description": "Test XSS in CSS context",
+          "input": "body{background-image: url(\"javascript:alert('xss')\");}",
+          "severity": "high",
+          "source_reference": "https://owasp.org/www-community/attacks/xss/",
+          "expected_detection": "alert on XSS payloads in CSS",
+          "complexity": "high"
+        }
+      ],
+      "other_sensitive_data_types": [
+        {
+          "rule_id": "sensitive-003",
+          "description": "Test OAuth access tokens",
+          "input": "oauth_token=ya29.a0ARrdaM9...",
+          "severity": "high",
+          "source_reference": "https://oauth.net/2/",
+          "expected_detection": "alert on OAuth access tokens",
+          "complexity": "medium"
+        },
+        {
+          "rule_id": "sensitive-004",
+          "description": "Test private keys",
+          "input": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkq...",
+          "severity": "high",
+          "source_reference": "https://www.openssl.org/docs/manmaster/man1/openssl-pkeyutl.html",
+          "expected_detection": "alert on private key patterns",
+          "complexity": "high"
+        },
+        {
+          "rule_id": "sensitive-005",
+          "description": "Test JWT secrets",
+          "input": "jwt_secret='supersecretkey'",
+          "severity": "high",
+          "source_reference": "https://jwt.io/",
+          "expected_detection": "alert on JWT secret keys",
+          "complexity": "medium"
+        }
+      ],
+      "other_injection_types": [
+        {
+          "rule_id": "cmd-injection-001",
+          "description": "Test command injection",
+          "input": "; ls -la;",
+          "severity": "high",
+          "source_reference": "https://owasp.org/www-community/attacks/Command_Injection",
+          "expected_detection": "alert on command injection payloads",
+          "complexity": "high"
+        },
+        {
+          "rule_id": "ldap-injection-001",
+          "description": "Test LDAP injection",
+          "input": "*)(|(userPassword=*))",
+          "severity": "high",
+          "source_reference": "https://owasp.org/www-community/attacks/LDAP_Injection",
+          "expected_detection": "alert on LDAP injection payloads",
+          "complexity": "high"
+        }
+      ]
+    },
+    "structure_and_metadata_suggestions": {
+      "structure": "Organize test cases into multiple JSON files or sections by category (e.g., xss_tests.json, sql_tests.json, sensitive_data_tests.json).",
+      "metadata": [
+        "Add fields like severity (low, medium, high) to indicate risk level.",
+        "Include source_reference URLs to standards or CVE examples.",
+        "Add expected_behavior or expected_detection fields for automated test validation.",
+        "Include complexity or evasion_techniques to indicate difficulty or obfuscation level."
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "test_cases": [
+    {
+      "rule_id": "cmd-injection-001",
+      "description": "Test command injection",
+      "input": "; ls -la;",
+      "severity": "high",
+      "source_reference": "https://owasp.org/www-community/attacks/Command_Injection",
+      "expected_detection": "alert on command injection payloads",
+      "complexity": "high"
+    },
+    {
+      "rule_id": "ldap-injection-001",
+      "description": "Test LDAP injection",
+      "input": "*)(|(userPassword=*))",
+      "severity": "high",
+      "source_reference": "https://owasp.org/www-community/attacks/LDAP_Injection",
+      "expected_detection": "alert on LDAP injection payloads",
+      "complexity": "high"
+    }
+  ]
+}
