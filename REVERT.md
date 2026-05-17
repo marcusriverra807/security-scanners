@@ -1,7 +1,3 @@
-# Revert "Add script to scan for credit card patterns in files using regex"
+# Revert commit 29d8fece
 
-This reverts commit 9c30e772f53724d8456158166682138a86daca3f.
-
-# Changes made
-
-- Removed the script to scan for credit card patterns.
+This commit reverts changes made in commit 29d8fece9443591ec043e5b5e94a2d360f206814.
