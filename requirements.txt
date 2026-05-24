@@ -9,7 +9,7 @@ This project is to detect SQL injection using Machine Learning and Deep Learning
 - csv
 - base64
 - xml
-- **sql-injection-detection==1.0.0**  # Example stable version
+- **sql-injection-detection==1.1.0**  # Updated version
 
 ## Installation
 
