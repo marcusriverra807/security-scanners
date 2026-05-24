@@ -1,3 +1,3 @@
-# Revert commit 29d8fece
+# Enable GitHub Advanced Security
 
-This commit reverts the changes made in commit 29d8fece.
+This commit enables GitHub Advanced Security features for the repository.
