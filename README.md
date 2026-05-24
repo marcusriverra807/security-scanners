@@ -1,3 +1,12 @@
-# Revert commit 29d8fece
+# Review Flagged API Keys
 
-This commit reverts the changes made in commit 29d8fece.
+## Changes Made
+- Updated flagged API keys in LLM.md, MAC.md, and README.md.
+
+## Files Updated
+- LLM.md
+- MAC.md
+- README.md
+
+## Next Steps
+- Review changes and ensure no sensitive information is exposed.
