@@ -1,7 +1,3 @@
-# Revert "Add script to scan for credit card patterns in files using regex"
+# Revert "Update package.json for outdated packages"
 
-This reverts commit 9c30e772f53724d8456158166682138a86daca3f.
-
-# Changes made
-
-- Removed the script to scan for credit card patterns.
+This reverts commit 39a97d6e1e84756c97a8cf0b0e6e71cc05291db6.
