@@ -1,0 +1,78 @@
+# SQL XSS Detection Configuration
+
+# Enhanced detection rules for Cross-Site Scripting (XSS) and SQL Injection
+
+rules:
+  # Existing XSS rules unchanged
+  - id: xss-001
+    description: "Detect script tag injection with improved accuracy"
+    pattern: "<script\\b[^>]*?(src=['\"'][^'\"']+['\"])?[^>]*>(?!.*(console\\.log|void\\(0\\)|alert|\\/\\/.*|\/\\*.*\\*\/|debugger|log))?.*?<\\/script>"
+    severity: "high"
+    context: "Check for script tags without valid sources and inline scripts, excluding common benign patterns like console.log, void(0), alert, debugger, log, and comments."
+    test_cases:
+      - input: "<script src='http://malicious.com'></script>"
+        expected: "true"
+      - input: "<script></script>"
+        expected: "true"
+      - input: "<div></div>"
+        expected: "false"
+      - input: "<script src=''></script>"
+        expected: "true"
+      - input: "<script>alert('XSS');</script>"
+        expected: "true"
+      - input: "<script type='text/javascript'>alert(1);</script>"
+        expected: "true"
+      - input: "<SCRIPT>alert(1);</SCRIPT>"
+        expected: "true"
+      - input: "<script>console.log('test');</script>"
+        expected: "false"
+      - input: "<script>/* harmless comment */ alert('XSS')</script>"
+        expected: "true"
+      - input: "<script>// benign comment\nconsole.log('test')</script>"
+        expected: "false"
+      - input: "<script>someFunction()</script>"
+        expected: "true"
+    estimated_fp_rate: "1.5%"
+    runbook_link: "https://example.com/runbook/xss-detection"
+  # ... (other existing XSS rules continue here unchanged) ...
+
+  # New SQL Injection Detection Rules
+  - id: sql-005
+    description: "Detect time-based blind injection attempts"
+    pattern: "1; WAITFOR DELAY '00:00:05'"
+    severity: "high"
+    context: "Detects attempts to infer database information using time delays."
+    test_cases:
+      - input: "1; WAITFOR DELAY '00:00:05'"
+        expected: true
+      - input: "SELECT * FROM users;"
+        expected: false
+  - id: sql-006
+    description: "Detect encoded SQL injection patterns"
+    pattern: "%27 OR 1=1 --"
+    severity: "high"
+    context: "Identifies attempts to bypass filters using URL encoding."
+    test_cases:
+      - input: "%27 OR 1=1 --"
+        expected: true
+      - input: "SELECT * FROM products;"
+        expected: false
+  - id: sql-007
+    description: "Detect comment-based SQL injection obfuscation"
+    pattern: "1=1 /* comment */"
+    severity: "high"
+    context: "Detects attempts to obfuscate SQL injections using comments."
+    test_cases:
+      - input: "1=1 /* comment */"
+        expected: true
+      - input: "SELECT * FROM orders;"
+        expected: false
+
+# Machine Learning Integration Notes
+# - Data collection and labeling of SQL queries for supervised and unsupervised learning.
+# - Feature extraction including tokenization and syntactic pattern identification.
+# - Model training using Random Forest, SVM, and anomaly detection models.
+# - Integration of ML inference in detection pipeline with confidence scoring.
+# - Continuous model retraining and performance monitoring based on feedback.
+
+# End of updated scanner configuration

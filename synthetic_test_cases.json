@@ -1,0 +1,154 @@
+{
+  "test_cases": [
+    {
+      "rule_id": "new-xss-001",
+      "description": "Test URL encoding attacks",
+      "input": "%3Cscript%3Ealert(1)%3C/script%3E"
+    },
+    {
+      "rule_id": "new-xss-002",
+      "description": "Test DOM-based XSS",
+      "input": "document.write('<img src=x onerror=alert(1)>')"
+    },
+    {
+      "rule_id": "new-xss-003",
+      "description": "Test deprecated HTML attributes",
+      "input": "<script onclick='alert(1)'>"
+    },
+    {
+      "rule_id": "new-xss-004",
+      "description": "Test script tag with attributes",
+      "input": "<script src='malicious.js' onerror='alert(1)'></script>"
+    },
+    {
+      "rule_id": "new-xss-005",
+      "description": "Test dynamic script execution",
+      "input": "eval('alert(1)'); setTimeout('alert(1)',1000);"
+    },
+    {
+      "rule_id": "new-xss-006",
+      "description": "Test inline event handlers",
+      "input": "<div onclick='alert(1)'>Click me</div>"
+    },
+    {
+      "rule_id": "new-sql-001",
+      "description": "Test time-based SQL injection",
+      "input": "SELECT * FROM users WHERE id=1; WAITFOR DELAY '00:00:10'"
+    },
+    {
+      "rule_id": "sensitive-001",
+      "description": "Test hardcoded API keys",
+      "input": "API_KEY='1234567890abcdef1234567890abcdef'"
+    },
+    {
+      "rule_id": "sensitive-002",
+      "description": "Test hardcoded secrets",
+      "input": "password='mypassword123'"
+    },
+    {
+      "rule_id": "new-xss-007",
+      "description": "Test SVG element attribute injection",
+      "input": "<svg><a xmlns:xlink='http://www.w3.org/1999/xlink' xlink:href='javascript:alert(1)'>Click me</a></svg>"
+    },
+    {
+      "rule_id": "new-xss-008",
+      "description": "Test HTML entity encoded script injection",
+      "input": "&lt;script&gt;alert(&#x31;);&lt;/script&gt;"
+    },
+    {
+      "rule_id": "new-xss-009",
+      "description": "Test iframe injection attempt",
+      "input": "<iframe src='http://malicious-site.com'></iframe>"
+    },
+    {
+      "rule_id": "new-xss-010",
+      "description": "Test dangerous DOM method innerHTML",
+      "input": "element.innerHTML = '<img src=x onerror=alert(1)>';}
+    },
+    {
+      "rule_id": "new-xss-011",
+      "description": "Test base64 encoded XSS payload",
+      "input": "PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg=="
+    },
+    {
+      "rule_id": "new-xss-012",
+      "description": "Test suspicious CSS expressions",
+      "input": "<div style='width: expression(alert(1));'></div>"
+    },
+    {
+      "rule_id": "new-xss-013",
+      "description": "Test Content Security Policy violation pattern",
+      "input": "script-src 'unsafe-inline'; alert(1);"
+    },
+    {
+      "rule_id": "new-xss-014",
+      "description": "Test reflected XSS pattern in HTTP request",
+      "input": "GET /search?q=<script>alert(1)</script> HTTP/1.1"
+    },
+    {
+      "rule_id": "new-xss-015",
+      "description": "Test XSS via new HTML5 elements and attributes",
+      "input": "<details open ontoggle='alert(1)'>Details content</details>"
+    },
+    {
+      "rule_id": "new-xss-016",
+      "description": "Test XSS using postMessage API",
+      "input": "window.postMessage('<img src=x onerror=alert(1)>', '*');"
+    },
+    {
+      "rule_id": "new-xss-017",
+      "description": "Test XSS using WebSocket API",
+      "input": "new WebSocket('ws://attacker.com').onmessage = function() { alert(1); };"
+    },
+    {
+      "rule_id": "new-xss-018",
+      "description": "Test polyglot XSS payloads bypassing filters",
+      "input": "'\"><svg/onload=alert(1)>"
+    },
+    {
+      "rule_id": "new-xss-019",
+      "description": "Test mutation-based DOM XSS modifying elements post-load",
+      "input": "var el = document.createElement('div'); el.innerHTML = '<img src=x onerror=alert(1)>'; document.body.appendChild(el);"
+    },
+    {
+      "rule_id": "new-xss-020",
+      "description": "Test XSS via onload event on body tag",
+      "input": "<body onload='alert(1)'>"
+    },
+    {
+      "rule_id": "new-xss-021",
+      "description": "Test XSS via onerror event on image",
+      "input": "<img src='invalid.png' onerror='alert(1)'>"
+    },
+    {
+      "rule_id": "new-xss-022",
+      "description": "Test XSS embedded in JSON strings",
+      "input": "{\"username\":\"<script>alert(1)</script>\"}"
+    },
+    {
+      "rule_id": "new-xss-023",
+      "description": "Test less common event handlers (onblur, onfocus, onsubmit)",
+      "input": "<input type='text' onblur='alert(1)' onfocus='alert(1)' onsubmit='alert(1)'>"
+    },
+    {
+      "rule_id": "new-xss-024",
+      "description": "Test obfuscated JavaScript URL with escape sequences",
+      "input": "<a href='javascript\x3Aalert(1)'>Click</a>"
+    },
+    {
+      "rule_id": "new-xss-025",
+      "description": "Test double encoded script tag",
+      "input": "%253Cscript%253Ealert(1)%253C/script%253E"
+    },
+    {
+      "rule_id": "new-xss-026",
+      "description": "Test obfuscated event handler with encoded characters",
+      "input": "<img src='x' onerror='al\x65rt(1)'>"
+    },
+    {
+      "rule_id": "new-xss-027",
+      "description": "Test obfuscated eval function call",
+      "input": "<script>ev\x61l('alert(1)')</script>"
+    }
+  ]
+}

