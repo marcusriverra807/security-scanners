@@ -5,7 +5,7 @@ This project is to detect SQL injection using Machine Learning and Deep Learning
 ## Dependencies
 
 - Python 3.9.5
-- urllib
+- urllib3==1.26.16
 - csv
 - base64
 - xml
