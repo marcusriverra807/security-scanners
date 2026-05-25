@@ -1,6 +1,7 @@
-# security-scanners
-Security scanning tools and configurations
+# Enable GitHub Advanced Security
 
-## Dependency Version Bump
+This commit enables GitHub Advanced Security features for the repository.
 
-Updated dependencies to the latest versions for improved security and performance.
+- Initial commit for release
+
+- Updated dependencies for security and performance.
