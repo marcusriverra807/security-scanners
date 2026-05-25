@@ -1,7 +1,5 @@
-# Revert "Add script to scan for credit card patterns in files using regex"
+# This reverts commit 03e99611ce688b3cb8801405c6d5e4b55dc04895
 
-This reverts commit 9c30e772f53724d8456158166682138a86daca3f.
+# Revert "Enable GitHub Advanced Security"
 
-# Changes made
-
-- Removed the script to scan for credit card patterns.
+This reverts commit 03e99611ce688b3cb8801405c6d5e4b55dc04895.
