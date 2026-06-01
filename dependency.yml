@@ -1,0 +1,12 @@
+# Dependency Configuration
+
+# This file is used to manage and monitor project dependencies.
+# It helps in automating vulnerability scanning and facilitating upgrades.
+
+# Example dependencies
+
+dependencies:
+  - name: example-package
+    version: ^1.0.0
+  - name: another-package
+    version: ^2.3.4
