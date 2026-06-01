@@ -1,5 +1,18 @@
-# Enable GitHub Advanced Security
+# TransactionEngine.java Documentation
 
-This commit enables GitHub Advanced Security features for the repository.
+## Overview
+TransactionEngine.java is responsible for handling transactions within the application.
 
-- Initial commit for release
+## Public API
+- **startTransaction()**: Initiates a new transaction.
+- **commitTransaction()**: Commits the current transaction.
+- **rollbackTransaction()**: Rolls back the current transaction.
+
+## Dependencies
+- **Database Connection**: Requires a valid database connection to operate.
+- **Logging Framework**: Utilizes a logging framework for transaction logging.
+
+## Typical Invocation Flow
+1. Call `startTransaction()` to begin.
+2. Perform necessary operations.
+3. Call `commitTransaction()` to save changes or `rollbackTransaction()` to discard changes.
