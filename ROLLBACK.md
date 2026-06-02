@@ -1,3 +1,3 @@
 # Rollback commit
 
-This commit rolls back the changes made in commit 4a81551 that enabled GitHub Advanced Security instructions due to incident.
+This commit rolls back the changes made in commit 9952f84 that enabled GitHub Advanced Security for secret scanning due to incident.
