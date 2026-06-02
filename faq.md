@@ -1,0 +1,1 @@
+Found hardcoded credentials in faq.md. Further review is needed.
