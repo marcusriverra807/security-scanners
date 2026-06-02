@@ -10,3 +10,8 @@ This file enables GitHub Advanced Security features for enhanced security postur
 
 - Ensure all team members have access to security features.
 - Regularly review security alerts and findings.
+
+## Credential Leak Detection Playbook
+
+- Implement credential leak detection rules.
+- Regularly update detection rules based on findings.
