@@ -1,0 +1,19 @@
+[allowlist]
+  # Add patterns to allowlist here
+
+[rules]
+  # Define rules for secret scanning
+  [[rules]]
+    description = "Generic API Key"
+    regex = "(?i)\b[A-Za-z0-9]{32}\b"
+    tags = ["apikey"]
+
+  [[rules]]
+    description = "AWS Access Key"
+    regex = "(?i)AKIA[0-9A-Z]{16}"
+    tags = ["aws"]
+
+  [[rules]]
+    description = "AWS Secret Key"
+    regex = "(?i)[A-Za-z0-9/+=]{40}"
+    tags = ["aws"]
