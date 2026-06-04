@@ -17,3 +17,8 @@
     description = "AWS Secret Key"
     regex = "(?i)[A-Za-z0-9/+=]{40}"
     tags = ["aws"]
+
+  [[rules]]
+    description = "GitHub Personal Access Token"
+    regex = "(?i)ghp_[a-zA-Z0-9]{36}"
+    tags = ["github"]
