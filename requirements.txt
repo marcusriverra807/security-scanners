@@ -1,10 +1,1 @@
-# Security Scanners
-
-## Requirements
-
-- urllib3==2.7.1
-
-## Instructions
-
-1. Run `pip install -r requirements.txt` to install dependencies.
-2. Use `pip-audit` to check for vulnerabilities in dependencies.
+urllib3==2.10.7
