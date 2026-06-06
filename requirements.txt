@@ -1,2 +1,2 @@
-urllib3==2.21.0
+urllib3==2.22.0
 bandit
