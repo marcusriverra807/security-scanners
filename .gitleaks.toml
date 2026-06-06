@@ -1,24 +1,24 @@
+[[rules]]
+  description = "Generic API Key"
+  regex = "(?i)\b[A-Za-z0-9]{32}\b"
+  tags = ["apikey"]
+
+[[rules]]
+  description = "AWS Access Key"
+  regex = "(?i)AKIA[0-9A-Z]{16}"
+  tags = ["aws"]
+
+[[rules]]
+  description = "AWS Secret Key"
+  regex = "(?i)[A-Za-z0-9/+=]{40}"
+  tags = ["aws"]
+
+[[rules]]
+  description = "GitHub Personal Access Token"
+  regex = "(?i)ghp_[a-zA-Z0-9]{36}"
+  tags = ["github"]
+
 [allowlist]
   # Add patterns to allowlist here
-
-[rules]
-  # Define rules for secret scanning
-  [[rules]]
-    description = "Generic API Key"
-    regex = "(?i)\b[A-Za-z0-9]{32}\b"
-    tags = ["apikey"]
-
-  [[rules]]
-    description = "AWS Access Key"
-    regex = "(?i)AKIA[0-9A-Z]{16}"
-    tags = ["aws"]
-
-  [[rules]]
-    description = "AWS Secret Key"
-    regex = "(?i)[A-Za-z0-9/+=]{40}"
-    tags = ["aws"]
-
-  [[rules]]
-    description = "GitHub Personal Access Token"
-    regex = "(?i)ghp_[a-zA-Z0-9]{36}"
-    tags = ["github"]
+  - "example-32-character-string-1234"
+  - "safe-32-character-value-5678"
