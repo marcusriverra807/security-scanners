@@ -1,0 +1,3 @@
+Revert 'Tighten regex rules and add allowlist entries'
+
+This reverts commit 380e4b733984356740051e42e8fc7a336a45b51d.
