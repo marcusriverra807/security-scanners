@@ -1,0 +1,3 @@
+Revert commit a60eb686f5e9ee
+
+This commit reverts the changes made in commit a60eb686f5e9ee, restoring the previous regex patterns for credit card validation.
